@@ -215,14 +215,14 @@ export default function Game(props: any) {
         //add a fuel item every 10 seconds
         const timeSeconds = new Date(time.current).getSeconds();
 
-        if (timeSeconds % 2 === 0 && !fuelHasBeenAdded)
+        if (timeSeconds % 10 === 0 && !fuelHasBeenAdded)
         {
             const fuel = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, 20, 20, { label: 'fuel' });
             Matter.World.add(world, fuel);
             entities.fuel = { body: fuel, size: [20, 20], renderer: Fuel };
             setFuelHasBeenAdded(true);
         }
-        else if (timeSeconds % 2 !== 0)
+        else if (timeSeconds % 10 !== 0)
         {
             setFuelHasBeenAdded(false);
         }
