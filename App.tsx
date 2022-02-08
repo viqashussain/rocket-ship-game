@@ -1,20 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { View } from 'react-native';
+import { Provider } from 'react-redux';
+import Game from "./Components/Game";
+// import Game from "./Components/Game";
+import { store } from "./redux/Store";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  // constructor(props) {
+  //   super(props);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  //   this.state = {
+  //     running: false,
+  //     health: 100,
+  //     world: null,
+  //     level: 1
+  //   };
+
+  //   // this.gameEngine = null;
+
+  //   // this.entities = this.setupWorld();
+  // }
+
+  return (
+    <Provider store={store}>
+      <View></View>
+      <Game />
+    </Provider>
+  );
+
+
+  // scoreCounter = (entities, { touches, time }) => {
+  //   this.setState({
+  //     ...this.state,
+  //     score: this.state.score + 1
+  //   });
+
+  //   if (this.state.score > 3000 && this.state.level === 1) {
+  //     this.setState({
+  //       ...this.state,
+  //       level: 2
+  //     });
+  //   }
+  //   else if (this.state.score > 6000 && this.state.level === 2) {
+  //     this.setState({
+  //       ...this.state,
+  //       level: 3
+  //     });
+  //   }
+
+  //   return entities;
+  // }
+}
