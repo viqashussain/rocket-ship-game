@@ -1,5 +1,5 @@
 import Matter from "matter-js"
-import { useEffect, useRef, useState } from "react"
+import { createRef, useEffect, useRef, useState } from "react"
 import { View, TouchableOpacity, StatusBar, Text, StyleSheet } from "react-native"
 import { GameEngine } from "react-native-game-engine"
 import { useDispatch, useSelector } from "react-redux"
@@ -39,11 +39,21 @@ export default function Game(props: any) {
     useEffect(() => entitiesRef.current = entities, [entities]);
 
     const setupWorld = (): any => {
-        let engine = Matter.Engine.create({ enableSleeping: false, gravity: { scale: 0.001 } });
+        let engine = Matter.Engine.create({ enableSleeping: false, gravity: { scale: 0.0005 } });
         let world = engine.world;
 
         let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 50, 50, { label: 'rocket' });
+        rocket.collisionFilter = {
+            group: 1,
+            category: 3,
+            mask: 1
+        }
         let ceiling = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, 25, Constants.MAX_WIDTH, 50, { isStatic: true, label: 'ceiling' });
+        ceiling.collisionFilter = {
+            group: 1,
+            category: 2,
+            mask: 0
+        }
 
         let leftWall = Matter.Bodies.rectangle(0, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'leftWall' });
         let rightWall = Matter.Bodies.rectangle(Constants.MAX_WIDTH, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'rightWall' });
@@ -194,9 +204,9 @@ export default function Game(props: any) {
         // reRenderRock('bigRock3', entities, world, bigRock3);
 
 
-        const coin1 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, objectSizes.coin, objectSizes.coin, { label: 'coin1' });
-        const coin2 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, objectSizes.coin, objectSizes.coin, { label: 'coin2' });
-        const coin3 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, objectSizes.coin, objectSizes.coin, { label: 'coin3' });
+        const coin1 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.coin, objectSizes.coin, { label: 'coin1' });
+        const coin2 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.coin, objectSizes.coin, { label: 'coin2' });
+        const coin3 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.coin, objectSizes.coin, { label: 'coin3' });
 
         reRenderCoin('coin1', entities, world, coin1);
         reRenderCoin('coin2', entities, world, coin2);
