@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
-export default function SettingsScreen(props: any) {
+export default function HelpScreen(props: any) {
     const goBack = () => {
         props.navigation.navigate('Home');
     }
