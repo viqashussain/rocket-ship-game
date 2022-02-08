@@ -10,12 +10,14 @@ import { Audio } from 'expo-av';
 import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, UPDATE_SCORE } from "../redux/Actions"
 import Asteroid from "../matter-objects/Asteroid"
 import Coin from "../matter-objects/Coin"
+import Fuel from "../matter-objects/Fuel"
 
 export default function Game(props: any) {
 
     const [gameEngine, setGameEngine]: any = useState();
-    const [running, setRunning] = useState(false);
+    const [running, setRunning] = useState<boolean>(false);
     const [entities, setEntities]: any = useState(null);
+    const [fuelHasBeenAdded, setFuelHasBeenAdded] = useState<boolean>(false);
 
     const dispatch = useDispatch();
 
@@ -53,8 +55,8 @@ export default function Game(props: any) {
             const bodyA = event.pairs[0].bodyA;
             const bodyB = event.pairs[0].bodyB;
 
-            // // coin item has been hit/collected
-            // // add to the score
+            // coin item has been hit/collected
+            // add to the score
             if ((bodyA.label === 'rocket' && bodyB.label.startsWith('coin') || (bodyB.label === 'rocket' && bodyA.label.startsWith('coin')))) {
                 dispatch({ type: UPDATE_SCORE, payload: scoreRef.current + (100 * levelRef.current) })
 
@@ -83,10 +85,12 @@ export default function Game(props: any) {
                 }
 
                 // remove the health item now it has been collected
+                delete entitiesRef.current[bodyToRemove.label];
                 Matter.Composite.remove(world, bodyToRemove, true);
-                delete entities[bodyToRemove.label];
 
-                await playSound('fuel');
+                setEntities(entitiesRef.current);
+
+                // await playSound('fuel');
             }
 
             // asteroid has been hit - take a damage hit
@@ -156,51 +160,27 @@ export default function Game(props: any) {
         { coin: 15, asteroid: 40, level: 3 }
     ]
 
-    // const levelOneAsteroidSize = 10;
-    // const levelTwoAsteroidSize = 25;
-    // const levelThreeAsteroidSize = 40;
-
     const Physics = (entities: any, { touches, time }: any) => {
         let engine: Matter.Engine = entities.physics.engine;
         let rocket = entities.rocket.body;
         const world: Matter.World = entities.physics.world;
 
         touches.filter((t: any) => t.type === "press").forEach((t: any) => {
-            // console.log(t.event.locationX)
             const locationX = t.event.locationX;
-            // const locationY = t.locationY;
             const isLeftTouch = locationX < (Constants.MAX_WIDTH / 2);
             Matter.Body.rotate(rocket, Math.PI / 6);
             if (isLeftTouch) {
                 const amountLeft = 1 - (locationX / (Constants.MAX_WIDTH / 2));
                 // the further left you press, the further you fly right
                 const force = 0.075 * amountLeft;
-                // Matter.Body.rotate(rocket, Math.PI/6);
                 Matter.Body.applyForce(rocket, rocket.position, { x: -force, y: -0.05 });
             }
             else {
                 const amountRight = (locationX - 200) / (Constants.MAX_WIDTH / 2);
                 // the further right you press, the further you fly left
                 const force = 0.075 * amountRight;
-                // Matter.Body.rotate(rocket, -Math.PI/6);
                 Matter.Body.applyForce(rocket, rocket.position, { x: force, y: -0.05 });
             }
-            // Matter.Body.applyForce(rocket, rocket.position, { x: 0.00, y: -0.10 });
-
-            // const bigRock = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 500, 50, 50, { restitution: 0.5 });
-            // Matter.World.add(world, bigRock);
-            // entities['bigRock'] = { body: bigRock, size: [50, 50], color: "blue", renderer: BigRock };
-        });
-
-        touches.filter((t: any) => t.type === "move").forEach((t: any) => {
-            // let finger = entities[t.id];
-            // if (finger && finger.position) {
-            //     finger.position = [
-            //         finger.position[0] + t.delta.pageX,
-            //         finger.position[1] + t.delta.pageY
-            //     ];
-            // }
-            // console.log('here')
         });
 
         let objectSizes = sizes.find(x => x.level === levelRef.current)!;
@@ -223,17 +203,19 @@ export default function Game(props: any) {
         reRenderCoin('coin3', entities, world, coin3);
 
         //add a fuel item every 10 seconds
-        // const timeSeconds = new Date(time.current).getSeconds();
+        const timeSeconds = new Date(time.current).getSeconds();
 
-        // if (timeSeconds % 10 === 0 && !fuelHasBeenAdded)
-        // {
-        //     const fuelItem = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, 20, 20, { label: 'fuel' });
-        //     entities.fuelItem = { body: fuelItem, size: [20, 20], color: "green", renderer: BigRock };
-        // }
-        // else
-        // {
-        //     setFuelHasBeenAdded(false);
-        // }
+        if (timeSeconds % 2 === 0 && !fuelHasBeenAdded)
+        {
+            const fuel = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, 20, 20, { label: 'fuel' });
+            Matter.World.add(world, fuel);
+            entities.fuel = { body: fuel, size: [20, 20], renderer: Fuel };
+            setFuelHasBeenAdded(true);
+        }
+        else if (timeSeconds % 2 !== 0)
+        {
+            setFuelHasBeenAdded(false);
+        }
 
         Matter.Engine.update(engine, time.delta);
 
@@ -252,8 +234,6 @@ export default function Game(props: any) {
 
                 Matter.World.add(world, rock);
                 entities[rockName] = { body: rock, size: [width, height], color: "blue", renderer: Asteroid };
-            } else {
-                // Matter.Body.translate(entities["pipe" + i].body, { x: -1, y: 0 });
             }
         }
         else {

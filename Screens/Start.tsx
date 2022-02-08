@@ -17,7 +17,7 @@ export default function StartScreen(props: any) {
 const styles = StyleSheet.create({
     playButton: {
         paddingTop: 50,
-        height: 50,
+        height: 500,
         width: '100%',
         backgroundColor: 'red'
     }
