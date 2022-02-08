@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { View, Image, Animated } from "react-native";
 
-export default class BigRock extends Component {
+interface Props { 
+    body: Matter.Body; 
+    size: number[]
+}
+
+export default class BigRock extends Component<Props, {}> {
     render() {
         const width = this.props.size[0];
         const height = this.props.size[1];

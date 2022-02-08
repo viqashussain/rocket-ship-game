@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import { View, Image, Animated } from "react-native";
 
-export default class Rocket extends Component {
+interface Props { 
+    body: Matter.Body; 
+    size: number[]
+}
+export default class Rocket extends Component<Props, {}> {
 
-    constructor(props){
+    animatedValue;
+
+    constructor(props: Props){
         super(props);
 
         this.animatedValue = new Animated.Value(this.props.body.velocity.y);

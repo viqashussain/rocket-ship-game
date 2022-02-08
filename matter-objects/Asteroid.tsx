@@ -1,7 +1,7 @@
-import React, { Component, Props } from "react";
+import React, { Component } from "react";
 import { Image } from "react-native";
 interface Props { 
-    body: { position: { x: number, y: number } }; 
+    body: Matter.Body; 
     size: number[]
 }
 export default class AsteroidRock extends Component<Props, {}> {
