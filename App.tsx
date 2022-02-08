@@ -1,9 +1,11 @@
 import React from "react";
-import { View } from 'react-native';
 import { Provider } from 'react-redux';
-import Game from "./Components/Game";
+import Game from "./Screens/Game";
 // import Game from "./Components/Game";
 import { store } from "./redux/Store";
+import StartScreen from "./Screens/Start";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export default function App() {
   // constructor(props) {
@@ -21,33 +23,16 @@ export default function App() {
   //   // this.entities = this.setupWorld();
   // }
 
+  const Stack = createNativeStackNavigator();
+
   return (
-    <Provider store={store}>
-      <View></View>
-      <Game />
-    </Provider>
+    <NavigationContainer>
+      <Provider store={store}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home" component={StartScreen} />
+          <Stack.Screen name="Game" component={Game} />
+        </Stack.Navigator>
+      </Provider >
+    </NavigationContainer>
   );
-
-
-  // scoreCounter = (entities, { touches, time }) => {
-  //   this.setState({
-  //     ...this.state,
-  //     score: this.state.score + 1
-  //   });
-
-  //   if (this.state.score > 3000 && this.state.level === 1) {
-  //     this.setState({
-  //       ...this.state,
-  //       level: 2
-  //     });
-  //   }
-  //   else if (this.state.score > 6000 && this.state.level === 2) {
-  //     this.setState({
-  //       ...this.state,
-  //       level: 3
-  //     });
-  //   }
-
-  //   return entities;
-  // }
 }
