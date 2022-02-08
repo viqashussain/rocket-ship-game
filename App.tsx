@@ -6,6 +6,7 @@ import { store } from "./redux/Store";
 import StartScreen from "./Screens/Start";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import SettingsScreen from "./Screens/Settings";
 
 export default function App() {
   // constructor(props) {
@@ -31,6 +32,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={StartScreen} />
           <Stack.Screen name="Game" component={Game} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </Provider >
     </NavigationContainer>

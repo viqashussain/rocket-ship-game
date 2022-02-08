@@ -5,10 +5,18 @@ export default function StartScreen(props: any) {
         props.navigation.navigate('Game');
     }
 
+    const goToSettings = () => {
+        props.navigation.navigate('Settings');
+    }
+
     return (
         <View>
             <TouchableOpacity style={styles.playButton} onPress={startGame}>
                 <Text>Play!</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.settingsButton} onPress={goToSettings}>
+                <Text>Settings</Text>
             </TouchableOpacity>
         </View>
     )
@@ -16,9 +24,13 @@ export default function StartScreen(props: any) {
 
 const styles = StyleSheet.create({
     playButton: {
-        paddingTop: 50,
         height: 500,
         width: '100%',
         backgroundColor: 'red'
+    },
+    settingsButton: {
+        height: 500,
+        width: '100%',
+        backgroundColor: 'green'
     }
 });
