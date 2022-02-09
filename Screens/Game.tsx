@@ -11,6 +11,7 @@ import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, UPDATE_SCORE } from 
 import Asteroid from "../matter-objects/Asteroid"
 import Coin from "../matter-objects/Coin"
 import Fuel from "../matter-objects/Fuel"
+import * as Haptics from 'expo-haptics';
 
 export default function Game(props: any) {
 
@@ -81,6 +82,7 @@ export default function Game(props: any) {
                 Matter.Composite.remove(world, bodyToRemove, true);
 
                 setEntities(entitiesRef.current);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
                 await playSound('health');
             }
@@ -100,6 +102,7 @@ export default function Game(props: any) {
                 Matter.Composite.remove(world, bodyToRemove, true);
 
                 setEntities(entitiesRef.current);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
                 // await playSound('fuel');
             }
