@@ -18,6 +18,7 @@ export default function Game(props: any) {
     const [running, setRunning] = useState<boolean>(false);
     const [entities, setEntities]: any = useState(null);
     const [fuelHasBeenAdded, setFuelHasBeenAdded] = useState<boolean>(false);
+    const [countdownValue, setCountdownValue] = useState<number | null>(3);
 
     const dispatch = useDispatch();
 
@@ -148,7 +149,23 @@ export default function Game(props: any) {
     }
 
     const startGame = () => {
-        setRunning(true);
+        let interval = setInterval(() => {
+            setCountdownValue(prev => {
+                if (prev === 1) {
+                    setCountdownValue(null);
+                    setRunning(true);
+                    clearInterval(interval);
+                }
+                return prev === null ? null : prev - 1;
+            })
+        }, 1000)
+        // interval cleanup on component unmount
+        return () => clearInterval(interval)
+    }
+
+    const pauseGame = () => {
+        setCountdownValue(3);
+        setRunning(false);
     }
 
     const ScoreCounter = (entities: any, { touches, time }: any) => {
@@ -194,12 +211,10 @@ export default function Game(props: any) {
         const bigRock3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock3' });
 
         reRenderRock('bigRock1', entities, world, bigRock1);
-        if (levelRef.current === 2)
-        {
+        if (levelRef.current === 2) {
             reRenderRock('bigRock2', entities, world, bigRock2);
         }
-        if (levelRef.current === 3)
-        {
+        if (levelRef.current === 3) {
             reRenderRock('bigRock3', entities, world, bigRock3);
         }
 
@@ -215,15 +230,13 @@ export default function Game(props: any) {
         //add a fuel item every 10 seconds
         const timeSeconds = new Date(time.current).getSeconds();
 
-        if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL === 0 && !fuelHasBeenAdded)
-        {
+        if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL === 0 && !fuelHasBeenAdded) {
             const fuel = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.fuel), -200, objectSizes.fuel, objectSizes.fuel, { label: 'fuel' });
             Matter.World.add(world, fuel);
             entities.fuel = { body: fuel, size: [20, 20], renderer: Fuel };
             setFuelHasBeenAdded(true);
         }
-        else if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL !== 0)
-        {
+        else if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL !== 0) {
             setFuelHasBeenAdded(false);
         }
 
@@ -276,6 +289,15 @@ export default function Game(props: any) {
 
     return (
         <View style={styles.container}>
+            {
+                running &&
+                <TouchableOpacity
+                    onPress={() => pauseGame()}
+                    style={styles.pauseGameButton}
+                >
+                    <Text>Pause</Text>
+                </TouchableOpacity>
+            }
             <View style={styles.scoreHealthContainer}>
                 <Text style={styles.level}>{level}</Text>
                 <Text style={styles.health}>{health}</Text>
@@ -289,12 +311,14 @@ export default function Game(props: any) {
                 ></TouchableOpacity>
             }
 
+            <View style={styles.countdownContainer}>
+                <Text style={styles.countdownText}>{countdownValue}</Text>
+            </View>
             {
                 entities != null ?
                     <GameEngine
                         ref={(ref) => {
-                            if (ref)
-                            {
+                            if (ref) {
                                 setGameEngine(ref)
                             }
                         }}
@@ -314,20 +338,16 @@ export default function Game(props: any) {
     )
 }
 
-function getXCoOrdForObjectInsertion(bodyWidth: number): number
-{
+function getXCoOrdForObjectInsertion(bodyWidth: number): number {
     let x = Math.random() * Constants.MAX_WIDTH;
 
     // move it more to the middle so it does not touch the walls
-    if (x < 5)
-    {
+    if (x < 5) {
         x += 5;
     }
-    else if ((x + bodyWidth) > Constants.MAX_WIDTH - 5)
-    {
+    else if ((x + bodyWidth) > Constants.MAX_WIDTH - 5) {
         // keep moving it left by 5 until it is in the correct position
-        while ((x + bodyWidth) > Constants.MAX_WIDTH - 5)
-        {
+        while ((x + bodyWidth) > Constants.MAX_WIDTH - 5) {
             x -= 5;
         }
     }
@@ -339,6 +359,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        display: 'flex',
+        flexDirection: 'row'
     },
     gameContainer: {
         position: 'absolute',
@@ -346,6 +368,15 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
+    },
+    countdownContainer: {
+        position: 'absolute',
+        width: Constants.MAX_WIDTH,
+        paddingTop: Constants.MAX_HEIGHT / 2,
+        textAlign: 'center'
+    },
+    countdownText: {
+        textAlign: 'center'
     },
     health: {
         paddingTop: 50,
@@ -375,6 +406,12 @@ const styles = StyleSheet.create({
         fontSize: 50,
         height: Constants.MAX_HEIGHT,
         width: Constants.MAX_WIDTH,
-
+    },
+    pauseGameButton: {
+        zIndex: 9999,
+        fontSize: 50,
+        height: 50,
+        width: 50,
+        backgroundColor: 'yellow',
     }
 });
