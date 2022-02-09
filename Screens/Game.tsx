@@ -189,9 +189,9 @@ export default function Game(props: any) {
 
         let objectSizes = Constants.OBJECT_SIZES.find(x => x.level === levelRef.current)!;
 
-        const bigRock1 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock1' });
-        const bigRock2 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock2' });
-        const bigRock3 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock3' });
+        const bigRock1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock1' });
+        const bigRock2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock2' });
+        const bigRock3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock3' });
 
         reRenderRock('bigRock1', entities, world, bigRock1);
         if (levelRef.current === 2)
@@ -204,9 +204,9 @@ export default function Game(props: any) {
         }
 
 
-        const coin1 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.coin, objectSizes.coin, { label: 'coin1' });
-        const coin2 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.coin, objectSizes.coin, { label: 'coin2' });
-        const coin3 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.coin, objectSizes.coin, { label: 'coin3' });
+        const coin1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin1' });
+        const coin2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin2' });
+        const coin3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin3' });
 
         reRenderCoin('coin1', entities, world, coin1);
         reRenderCoin('coin2', entities, world, coin2);
@@ -217,7 +217,7 @@ export default function Game(props: any) {
 
         if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL === 0 && !fuelHasBeenAdded)
         {
-            const fuel = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, 20, 20, { label: 'fuel' });
+            const fuel = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.fuel), -200, objectSizes.fuel, objectSizes.fuel, { label: 'fuel' });
             Matter.World.add(world, fuel);
             entities.fuel = { body: fuel, size: [20, 20], renderer: Fuel };
             setFuelHasBeenAdded(true);
@@ -312,6 +312,27 @@ export default function Game(props: any) {
 
         </View>
     )
+}
+
+function getXCoOrdForObjectInsertion(bodyWidth: number): number
+{
+    let x = Math.random() * Constants.MAX_WIDTH;
+
+    // move it more to the middle so it does not touch the walls
+    if (x < 5)
+    {
+        x += 5;
+    }
+    else if ((x + bodyWidth) > Constants.MAX_WIDTH - 5)
+    {
+        // keep moving it left by 5 until it is in the correct position
+        while ((x + bodyWidth) > Constants.MAX_WIDTH - 5)
+        {
+            x -= 5;
+        }
+    }
+
+    return x;
 }
 
 const styles = StyleSheet.create({
