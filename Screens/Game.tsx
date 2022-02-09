@@ -164,12 +164,6 @@ export default function Game(props: any) {
         return entities;
     }
 
-    const sizes = [
-        { coin: 50, asteroid: 10, level: 1 },
-        { coin: 30, asteroid: 25, level: 2 },
-        { coin: 15, asteroid: 40, level: 3 }
-    ]
-
     const Physics = (entities: any, { touches, time }: any) => {
         let engine: Matter.Engine = entities.physics.engine;
         let rocket = entities.rocket.body;
@@ -193,15 +187,21 @@ export default function Game(props: any) {
             }
         });
 
-        let objectSizes = sizes.find(x => x.level === levelRef.current)!;
+        let objectSizes = Constants.OBJECT_SIZES.find(x => x.level === levelRef.current)!;
 
-        const bigRock1 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, objectSizes.asteroid, objectSizes.asteroid, { restitution: 0.5, label: 'bigRock1' });
-        // const bigRock2 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, objectSizes.asteroid, objectSizes.asteroid, { restitution: 0.5, label: 'bigRock2' });
-        // const bigRock3 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, objectSizes.asteroid, objectSizes.asteroid, { restitution: 0.5, label: 'bigRock3' });
+        const bigRock1 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock1' });
+        const bigRock2 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock2' });
+        const bigRock3 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: 2, label: 'bigRock3' });
 
         reRenderRock('bigRock1', entities, world, bigRock1);
-        // reRenderRock('bigRock2', entities, world, bigRock2);
-        // reRenderRock('bigRock3', entities, world, bigRock3);
+        if (levelRef.current === 2)
+        {
+            reRenderRock('bigRock2', entities, world, bigRock2);
+        }
+        if (levelRef.current === 3)
+        {
+            reRenderRock('bigRock3', entities, world, bigRock3);
+        }
 
 
         const coin1 = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, -200, objectSizes.coin, objectSizes.coin, { label: 'coin1' });
@@ -215,14 +215,14 @@ export default function Game(props: any) {
         //add a fuel item every 10 seconds
         const timeSeconds = new Date(time.current).getSeconds();
 
-        if (timeSeconds % 10 === 0 && !fuelHasBeenAdded)
+        if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL === 0 && !fuelHasBeenAdded)
         {
             const fuel = Matter.Bodies.rectangle(Math.random() * Constants.MAX_WIDTH, 50, 20, 20, { label: 'fuel' });
             Matter.World.add(world, fuel);
             entities.fuel = { body: fuel, size: [20, 20], renderer: Fuel };
             setFuelHasBeenAdded(true);
         }
-        else if (timeSeconds % 10 !== 0)
+        else if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL !== 0)
         {
             setFuelHasBeenAdded(false);
         }

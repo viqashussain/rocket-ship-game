@@ -3,6 +3,12 @@ import { Dimensions } from 'react-native';
 const Constants = {
     MAX_WIDTH: Dimensions.get("screen").width,
     MAX_HEIGHT: Dimensions.get("screen").height,
-    MAX_ASTEROIDS_ON_SCREEN: 5
+    MAX_ASTEROIDS_ON_SCREEN: 5,
+    ADD_FUEL_SECOND_INTERVAL: 10,
+    OBJECT_SIZES: [
+        { coin: 50, asteroid: 20, level: 1 },
+        { coin: 30, asteroid: 45, level: 2 },
+        { coin: 15, asteroid: 75, level: 3 }
+    ]
 };
 export default Constants;
