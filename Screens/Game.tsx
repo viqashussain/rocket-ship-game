@@ -12,6 +12,8 @@ import Asteroid from "../matter-objects/Asteroid"
 import Coin from "../matter-objects/Coin"
 import Fuel from "../matter-objects/Fuel"
 import * as Haptics from 'expo-haptics';
+import { saveHighScoreLocally } from "../Storage";
+import HighScore from "../types/HighScore";
 
 export default function Game(props: any) {
 
@@ -174,10 +176,12 @@ export default function Game(props: any) {
         await sound?.sound.playAsync();
     }
 
-    const onEvent = (e: any) => {
+    const onEvent = async (e: any) => {
         if (e.type === "game-over") {
             setRunning(false);
             setModalVisible(true);
+            const highScore: HighScore = { id: makeid(), score: score, rank: null };
+            await saveHighScoreLocally(highScore);
         }
     }
 
@@ -401,7 +405,7 @@ export default function Game(props: any) {
                             }}
                             style={styles.gameContainer}
                             running={running}
-                            onEvent={onEvent}
+                            onEvent={async (e: any) => onEvent(e)}
                             systems={[Physics, ScoreCounter]}
                             entities={entities}>
                             <StatusBar hidden={true} />
@@ -537,3 +541,14 @@ const styles = StyleSheet.create({
         backgroundColor: 'yellow',
     }
 });
+
+function makeid() {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < 16; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
