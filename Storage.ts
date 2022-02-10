@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import HighScore from "./types/HighScore";
+import { HighScore } from "./types/HighScore";
 
 const localHighScoresKey = 'localHighScoresKey';
+const userNameKey = 'userNameKey';
 
 export const saveHighScoreLocally = async (newHighScore: HighScore) => {
     const localHighScores = await AsyncStorage.getItem(localHighScoresKey);
@@ -32,4 +33,10 @@ export const getLocalHighScores = async (): Promise<HighScore[]> => {
     }
 
     return localHighScoresArray;
+}
+
+export const getUserName = async (): Promise<string> => {
+    const username = await AsyncStorage.getItem(userNameKey);
+
+    return username!;
 }

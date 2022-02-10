@@ -1,5 +1,4 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen(props: any) {
     const startGame = () => {

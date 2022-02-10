@@ -13,7 +13,8 @@ import Coin from "../matter-objects/Coin"
 import Fuel from "../matter-objects/Fuel"
 import * as Haptics from 'expo-haptics';
 import { saveHighScoreLocally } from "../Storage";
-import HighScore from "../types/HighScore";
+import { HighScore } from "../types/HighScore";
+import { saveGlobalHighScore } from "../Firebase"
 
 export default function Game(props: any) {
 
@@ -182,6 +183,7 @@ export default function Game(props: any) {
             setModalVisible(true);
             const highScore: HighScore = { id: makeid(), score: score, rank: null };
             await saveHighScoreLocally(highScore);
+            await saveGlobalHighScore(highScore);
         }
     }
 
