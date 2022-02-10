@@ -19,6 +19,7 @@ export default function Game(props: any) {
     const [running, setRunning] = useState<boolean>(false);
     const [entities, setEntities]: any = useState(null);
     const [fuelHasBeenAdded, setFuelHasBeenAdded] = useState<boolean>(false);
+    const [showContinueButtonOnModal, setShowContinueButtonOnModal] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [countdownValue, setCountdownValue] = useState<number | null>(3);
 
@@ -55,6 +56,20 @@ export default function Game(props: any) {
         const newEntities = setupWorld();
         setEntities(newEntities);
         gameEngine.swap(newEntities);
+    }
+
+    const continueGame = () => {
+        setShowContinueButtonOnModal(false);
+        setModalVisible(false);
+        setCountdownValue(3);
+        startGame();
+    };
+
+    const pauseGame = () => {
+        setShowContinueButtonOnModal(true);
+        setModalVisible(true);
+        setCountdownValue(3);
+        setRunning(false);
     }
 
     const setupWorld = (): any => {
@@ -179,11 +194,6 @@ export default function Game(props: any) {
         }, 1000)
         // interval cleanup on component unmount
         return () => clearInterval(interval)
-    }
-
-    const pauseGame = () => {
-        setCountdownValue(3);
-        setRunning(false);
     }
 
     const ScoreCounter = (entities: any, { touches, time }: any) => {
@@ -330,6 +340,15 @@ export default function Game(props: any) {
                         <View style={styles.modalView}>
                             <Text style={styles.modalText}>Game Over!</Text>
                             <Text style={styles.modalText}>Score: {score}</Text>
+
+                            {
+                                showContinueButtonOnModal &&
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => continueGame()}>
+                                    <Text style={styles.textStyle}>Continue</Text>
+                                </Pressable>
+                            }
 
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
