@@ -1,6 +1,6 @@
 import Matter from "matter-js"
-import { createRef, useEffect, useRef, useState } from "react"
-import { View, TouchableOpacity, StatusBar, Text, StyleSheet } from "react-native"
+import React, { createRef, useEffect, useRef, useState } from "react"
+import { View, TouchableOpacity, StatusBar, Text, StyleSheet, ImageBackground } from "react-native"
 import { GameEngine } from "react-native-game-engine"
 import { useDispatch, useSelector } from "react-redux"
 import Rocket from "../matter-objects/Rocket"
@@ -44,7 +44,7 @@ export default function Game(props: any) {
         let engine = Matter.Engine.create({ enableSleeping: false, gravity: { scale: 0.0005 } });
         let world = engine.world;
 
-        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 50, 50, { label: 'rocket' });
+        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 60, 120, { label: 'rocket' });
         rocket.collisionFilter = {
             group: 1,
             category: 3,
@@ -118,7 +118,7 @@ export default function Game(props: any) {
 
         return {
             physics: { engine: engine, world: world },
-            rocket: { body: rocket, size: [50, 50], color: 'red', renderer: Rocket },
+            rocket: { body: rocket, size: [45, 90], color: 'red', renderer: Rocket },
             ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 50], color: "green", renderer: Wall },
             leftWall: { body: leftWall, size: [5, Constants.MAX_HEIGHT * 2], color: "green", renderer: Wall },
             rightWall: { body: rightWall, size: [5, Constants.MAX_HEIGHT * 2], color: "green", renderer: Wall },
@@ -196,14 +196,14 @@ export default function Game(props: any) {
             if (isLeftTouch) {
                 const amountLeft = 1 - (locationX / (Constants.MAX_WIDTH / 2));
                 // the further left you press, the further you fly right
-                const force = 0.075 * amountLeft;
-                Matter.Body.applyForce(rocket, rocket.position, { x: -force, y: -0.05 });
+                const force = 0.1 * amountLeft;
+                Matter.Body.applyForce(rocket, rocket.position, { x: -force, y: -0.1 });
             }
             else {
                 const amountRight = (locationX - 200) / (Constants.MAX_WIDTH / 2);
                 // the further right you press, the further you fly left
-                const force = 0.075 * amountRight;
-                Matter.Body.applyForce(rocket, rocket.position, { x: force, y: -0.05 });
+                const force = 0.1 * amountRight;
+                Matter.Body.applyForce(rocket, rocket.position, { x: force, y: -0.1 });
             }
         });
 
@@ -290,53 +290,56 @@ export default function Game(props: any) {
         }
     }
 
+    const imageBackground = require('../assets/img/background.png');
+
     return (
         <View style={styles.container}>
-            {
-                running &&
-                <TouchableOpacity
-                    onPress={() => pauseGame()}
-                    style={styles.pauseGameButton}
-                >
-                    <Text>Pause</Text>
-                </TouchableOpacity>
-            }
-            <View style={styles.scoreHealthContainer}>
-                <Text style={styles.level}>{level}</Text>
-                <Text style={styles.health}>{health}</Text>
-                <Text style={styles.score}>{score}</Text>
-            </View>
-            {
-                !running &&
-                <TouchableOpacity
-                    onPress={() => startGame()}
-                    style={styles.startGameButton}
-                ></TouchableOpacity>
-            }
+            <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}>
+                {
+                    running &&
+                    <TouchableOpacity
+                        onPress={() => pauseGame()}
+                        style={styles.pauseGameButton}
+                    >
+                        <Text>Pause</Text>
+                    </TouchableOpacity>
+                }
+                <View style={styles.scoreHealthContainer}>
+                    <Text style={styles.level}>{level}</Text>
+                    <Text style={styles.health}>{health}</Text>
+                    <Text style={styles.score}>{score}</Text>
+                </View>
+                {
+                    !running &&
+                    <TouchableOpacity
+                        onPress={() => startGame()}
+                        style={styles.startGameButton}
+                    ></TouchableOpacity>
+                }
 
-            <View style={styles.countdownContainer}>
-                <Text style={styles.countdownText}>{countdownValue}</Text>
-            </View>
-            {
-                entities != null ?
-                    <GameEngine
-                        ref={(ref) => {
-                            if (ref) {
-                                setGameEngine(ref)
-                            }
-                        }}
-                        style={styles.gameContainer}
-                        running={running}
-                        onEvent={onEvent}
-                        systems={[Physics, ScoreCounter]}
-                        entities={entities}>
-                        <StatusBar hidden={true} />
-                    </GameEngine>
-                    : <Text>Loading...</Text>
-            }
+                <View style={styles.countdownContainer}>
+                    <Text style={styles.countdownText}>{countdownValue}</Text>
+                </View>
+                {
+                    entities != null ?
+                        <GameEngine
+                            ref={(ref) => {
+                                if (ref) {
+                                    setGameEngine(ref)
+                                }
+                            }}
+                            style={styles.gameContainer}
+                            running={running}
+                            onEvent={onEvent}
+                            systems={[Physics, ScoreCounter]}
+                            entities={entities}>
+                            <StatusBar hidden={true} />
+                        </GameEngine>
+                        : <Text>Loading...</Text>
+                }
 
 
-
+            </ImageBackground>
         </View>
     )
 }
@@ -361,9 +364,13 @@ function getXCoOrdForObjectInsertion(bodyWidth: number): number {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         display: 'flex',
         flexDirection: 'row'
+    },
+    backgroundImage: {
+        width: Constants.MAX_WIDTH,
+        flex: 1,
+        justifyContent: "center"
     },
     gameContainer: {
         position: 'absolute',

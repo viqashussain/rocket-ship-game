@@ -21,7 +21,16 @@ export default class Rocket extends Component<Props, {}> {
         const x = this.props.body.position.x - width / 2;
         const y = this.props.body.position.y - height / 2;
 
-        const image = require('../assets/img/rocket.png');
+        const rocketImage = require('../assets/img/rocket.png');
+        const rocketImageWithFire = require('../assets/img/rocket_fire.png');
+
+        let image = rocketImage;
+
+        // flying up
+        if (this.props.body.velocity.y < 0)
+        {
+            image = rocketImageWithFire;
+        }
 
 
         this.animatedValue.setValue(this.props.body.velocity.x);
@@ -41,7 +50,7 @@ export default class Rocket extends Component<Props, {}> {
                     height: height,
                     transform: [{ rotate: rotation }]
                 }}
-                resizeMode="stretch"
+                resizeMode='stretch'
                 source={image} />
     );
   }
