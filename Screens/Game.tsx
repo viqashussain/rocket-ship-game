@@ -1,6 +1,6 @@
 import Matter from "matter-js"
 import React, { createRef, useEffect, useRef, useState } from "react"
-import { View, TouchableOpacity, StatusBar, Text, StyleSheet, ImageBackground } from "react-native"
+import { View, TouchableOpacity, StatusBar, Text, StyleSheet, ImageBackground, Modal, Pressable, Alert } from "react-native"
 import { GameEngine } from "react-native-game-engine"
 import { useDispatch, useSelector } from "react-redux"
 import Rocket from "../matter-objects/Rocket"
@@ -15,10 +15,11 @@ import * as Haptics from 'expo-haptics';
 
 export default function Game(props: any) {
 
-    const [gameEngine, setGameEngine]: any = useState();
+    const [gameEngine, setGameEngine]: any = useState<Matter.Engine>();
     const [running, setRunning] = useState<boolean>(false);
     const [entities, setEntities]: any = useState(null);
     const [fuelHasBeenAdded, setFuelHasBeenAdded] = useState<boolean>(false);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [countdownValue, setCountdownValue] = useState<number | null>(3);
 
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function Game(props: any) {
     const { score, level, health } = useSelector(state => (state as any).gameReducer);
 
     const scoreRef = useRef(score);
+    const gameEngineRef = useRef(gameEngine);
     const levelRef = useRef(level);
     const healthRef = useRef(level);
     const entitiesRef = useRef(entities);
@@ -37,12 +39,27 @@ export default function Game(props: any) {
 
     useEffect(() => scoreRef.current = score, [score]);
     useEffect(() => levelRef.current = level, [level]);
+    useEffect(() => gameEngineRef.current = gameEngine, [gameEngine]);
     useEffect(() => healthRef.current = health, [health]);
     useEffect(() => entitiesRef.current = entities, [entities]);
 
+    const goToHome = () => {
+        setModalVisible(false);
+        props.navigation.navigate('Home');
+    }
+
+    const restartGame = () => {
+        setModalVisible(false);
+        setRunning(false);
+        setCountdownValue(3);
+        const newEntities = setupWorld();
+        setEntities(newEntities);
+        gameEngine.swap(newEntities);
+    }
+
     const setupWorld = (): any => {
         let engine = Matter.Engine.create({ enableSleeping: false, gravity: { scale: 0.0005 } });
-        let world = engine.world;
+        let world: Matter.World = engine.world;
 
         let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 60, 120, { label: 'rocket' });
         rocket.collisionFilter = {
@@ -113,7 +130,7 @@ export default function Game(props: any) {
 
                 await playSound('explosion');
             }
-            // (gameEngine as any).dispatch({ type: "game-over" });
+
         });
 
         return {
@@ -143,12 +160,10 @@ export default function Game(props: any) {
     }
 
     const onEvent = (e: any) => {
-        // if (e.type === "game-over") {
-        //   // Alert.alert("Game Over");
-        //   this.setState({
-        //     running: false
-        //   });
-        // }
+        if (e.type === "game-over") {
+            setRunning(false);
+            setModalVisible(true);
+        }
     }
 
     const startGame = () => {
@@ -186,7 +201,7 @@ export default function Game(props: any) {
 
     const Physics = (entities: any, { touches, time }: any) => {
         let engine: Matter.Engine = entities.physics.engine;
-        let rocket = entities.rocket.body;
+        let rocket: Matter.Body = entities.rocket.body;
         const world: Matter.World = entities.physics.world;
 
         touches.filter((t: any) => t.type === "press").forEach((t: any) => {
@@ -245,6 +260,13 @@ export default function Game(props: any) {
 
         Matter.Engine.update(engine, time.delta);
 
+        // if the rocket has gone off the screen, gameover
+        if (rocket.position.y - + 200 > Constants.MAX_HEIGHT) {
+            //Matter.World.remove(world, entities[rockName].body);
+            //delete entities[rockName];
+            (gameEngineRef.current as any).dispatch({ type: "game-over" });
+        }
+
         return entities;
     };
 
@@ -295,6 +317,36 @@ export default function Game(props: any) {
     return (
         <View style={styles.container}>
             <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}>
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}
+                ><View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Game Over!</Text>
+                            <Text style={styles.modalText}>Score: {score}</Text>
+
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => restartGame()}>
+                                <Text style={styles.textStyle}>Restart Game</Text>
+                            </Pressable>
+
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => goToHome()}>
+                                <Text style={styles.textStyle}>Quit</Text>
+                            </Pressable>
+
+                        </View>
+                    </View>
+                </Modal>
+
                 {
                     running &&
                     <TouchableOpacity
@@ -362,6 +414,47 @@ function getXCoOrdForObjectInsertion(bodyWidth: number): number {
 }
 
 const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
     container: {
         flex: 1,
         display: 'flex',
