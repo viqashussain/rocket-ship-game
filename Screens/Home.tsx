@@ -1,4 +1,5 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen(props: any) {
     const startGame = () => {
@@ -10,11 +11,11 @@ export default function HomeScreen(props: any) {
     }
 
     const goToHelp = () => {
-        props.navigation.navigate('HighScores');
+        props.navigation.navigate('Help');
     }
 
     const goToHighScores = () => {
-        props.navigation.navigate('Help');
+        props.navigation.navigate('HighScores');
     }
 
     return (
