@@ -137,7 +137,7 @@ export default function Game(props: any) {
 
         });
 
-        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 60, 120, { label: 'rocket' });
+        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, (Constants.MAX_HEIGHT / 3) * 2, 60, 120, { label: 'rocket' }); 
         rocket.collisionFilter = {
             group: 1,
             category: 3,
