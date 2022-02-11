@@ -180,13 +180,13 @@ export default function Game(props: any) {
     }
 
     const onEvent = async (e: any) => {
-        // if (e.type === "game-over") {
-        //     setRunning(false);
-        //     setModalVisible(true);
-        //     const highScore: HighScore = { id: makeid(), score: score, rank: null };
-        //     await saveHighScoreLocally(highScore);
-        //     await saveGlobalHighScore(highScore);
-        // }
+        if (e.type === "game-over") {
+            setRunning(false);
+            setModalVisible(true);
+            const highScore: HighScore = { id: makeid(), score: score, rank: null };
+            await saveHighScoreLocally(highScore);
+            await saveGlobalHighScore(highScore);
+        }
     }
 
     const startGame = () => {
@@ -270,7 +270,7 @@ export default function Game(props: any) {
         if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL === 0 && !fuelHasBeenAdded) {
             const fuel = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.fuel), -200, objectSizes.fuel, objectSizes.fuel, { label: 'fuel' });
             Matter.World.add(world, fuel);
-            entities.fuel = { body: fuel, size: [20, 20], renderer: Fuel };
+            entities.fuel = { body: fuel, size: [objectSizes.fuel, objectSizes.fuel], renderer: Fuel };
             setFuelHasBeenAdded(true);
         }
         else if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL !== 0) {
