@@ -156,9 +156,9 @@ export default function Game(props: any) {
         return {
             physics: { engine: engine, world: world },
             rocket: { body: rocket, size: [45, 117], color: 'red', renderer: Rocket },
-            ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 50], color: "green", renderer: Wall },
-            leftWall: { body: leftWall, size: [5, Constants.MAX_HEIGHT * 2], color: "green", renderer: Wall },
-            rightWall: { body: rightWall, size: [5, Constants.MAX_HEIGHT * 2], color: "green", renderer: Wall },
+            ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 10], color: "transparent", renderer: Wall },
+            leftWall: { body: leftWall, size: [5, Constants.MAX_HEIGHT * 2], color: "transparent", renderer: Wall },
+            rightWall: { body: rightWall, size: [5, Constants.MAX_HEIGHT * 2], color: "transparent", renderer: Wall },
         }
     }
 
