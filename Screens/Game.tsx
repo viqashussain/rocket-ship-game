@@ -7,7 +7,7 @@ import Rocket from "../matter-objects/Rocket"
 import Constants from "../Constants"
 import Wall from "../matter-objects/Wall"
 import { Audio } from 'expo-av';
-import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, UPDATE_SCORE } from "../redux/Actions"
+import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, RESET_GAME, UPDATE_SCORE } from "../redux/Actions"
 import Asteroid from "../matter-objects/Asteroid"
 import Fuel from "../matter-objects/Fuel"
 import * as Haptics from 'expo-haptics';
@@ -40,6 +40,7 @@ export default function Game(props: any) {
 
     // setup world on load
     useEffect(() => {
+        dispatch({ type: RESET_GAME });
         setEntities(setupWorld());
     }, []);
 
@@ -55,6 +56,7 @@ export default function Game(props: any) {
     }
 
     const restartGame = () => {
+        dispatch({ type: RESET_GAME });
         setModalVisible(false);
         setRunning(false);
         setCountdownValue(3);
@@ -186,6 +188,8 @@ export default function Game(props: any) {
             const highScore: HighScore = { id: makeid(), score: score, rank: null };
             await saveHighScoreLocally(highScore);
             await saveGlobalHighScore(highScore);
+
+            
         }
     }
 

@@ -1,4 +1,4 @@
-import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, UPDATE_SCORE } from "./Actions";
+import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, UPDATE_SCORE, RESET_GAME } from "./Actions";
 
 const initialState = {
     score: 0,
@@ -16,6 +16,8 @@ function gameReducer(state = initialState, action: any) {
             return { ...state, health: state.health - 25 };
         case INCREMENT_LEVEL:
             return { ...state, level: state.level + 1 };
+        case RESET_GAME:
+            return { ...state, level: 1, health: 100, score: 0 };
 
         default:
             return state;
