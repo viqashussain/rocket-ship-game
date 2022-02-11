@@ -153,7 +153,7 @@ export default function Game(props: any) {
 
         return {
             physics: { engine: engine, world: world },
-            rocket: { body: rocket, size: [45, 90], color: 'red', renderer: Rocket },
+            rocket: { body: rocket, size: [45, 117], color: 'red', renderer: Rocket },
             ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 50], color: "green", renderer: Wall },
             leftWall: { body: leftWall, size: [5, Constants.MAX_HEIGHT * 2], color: "green", renderer: Wall },
             rightWall: { body: rightWall, size: [5, Constants.MAX_HEIGHT * 2], color: "green", renderer: Wall },
@@ -215,34 +215,39 @@ export default function Game(props: any) {
         return entities;
     }
 
+    let objectSizes = Constants.OBJECT_SIZES.find(x => x.level === levelRef.current)!;
+
+    const bigRock1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock1' });
+    const bigRock2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock2' });
+    const bigRock3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock3' });
+
+    const coin1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin1' });
+    const coin2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin2' });
+    const coin3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin3' });
+
     const Physics = (entities: any, { touches, time }: any) => {
         let engine: Matter.Engine = entities.physics.engine;
         let rocket: Matter.Body = entities.rocket.body;
         const world: Matter.World = entities.physics.world;
 
         touches.filter((t: any) => t.type === "press").forEach((t: any) => {
+            const forceScale = 0.1;
             const locationX = t.event.locationX;
             const isLeftTouch = locationX < (Constants.MAX_WIDTH / 2);
             Matter.Body.rotate(rocket, Math.PI / 6);
             if (isLeftTouch) {
                 const amountLeft = 1 - (locationX / (Constants.MAX_WIDTH / 2));
                 // the further left you press, the further you fly right
-                const force = 0.1 * amountLeft;
-                Matter.Body.applyForce(rocket, rocket.position, { x: -force, y: -0.1 });
+                const force = forceScale * amountLeft;
+                Matter.Body.applyForce(rocket, rocket.position, { x: -force, y: -forceScale });
             }
             else {
                 const amountRight = (locationX - 200) / (Constants.MAX_WIDTH / 2);
                 // the further right you press, the further you fly left
-                const force = 0.1 * amountRight;
-                Matter.Body.applyForce(rocket, rocket.position, { x: force, y: -0.1 });
+                const force = forceScale * amountRight;
+                Matter.Body.applyForce(rocket, rocket.position, { x: force, y: -forceScale });
             }
         });
-
-        let objectSizes = Constants.OBJECT_SIZES.find(x => x.level === levelRef.current)!;
-
-        const bigRock1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock1' });
-        const bigRock2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock2' });
-        const bigRock3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock3' });
 
         reRenderRock('bigRock1', entities, world, bigRock1);
         if (levelRef.current === 2) {
@@ -252,10 +257,6 @@ export default function Game(props: any) {
             reRenderRock('bigRock3', entities, world, bigRock3);
         }
 
-
-        const coin1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin1' });
-        const coin2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin2' });
-        const coin3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin3' });
 
         reRenderCoin('coin1', entities, world, coin1);
         reRenderCoin('coin2', entities, world, coin2);
