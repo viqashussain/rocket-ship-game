@@ -112,7 +112,7 @@ export default function Game(props: any) {
                 setEntities(entitiesRef.current);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-                await playSound('health');
+                await playSound('coin');
             }
 
             // fuel item has been hit/collected
@@ -132,7 +132,7 @@ export default function Game(props: any) {
                 setEntities(entitiesRef.current);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-                // await playSound('fuel');
+                await playSound('fuel');
             }
 
             // asteroid has been hit - take a damage hit
@@ -173,14 +173,26 @@ export default function Game(props: any) {
 
     const playSound = async (soundFileName: string) => {
         let sound;
-        if (soundFileName == 'health') {
+        if (soundFileName == 'coin') {
             sound = await Audio.Sound.createAsync(
-                require(`../assets/sounds/health.mp3`)
+                require(`../assets/sounds/coin.mp3`)
             );
         }
         else if (soundFileName == 'explosion') {
             sound = await Audio.Sound.createAsync(
                 require(`../assets/sounds/explosion.mp3`)
+            );
+        }
+
+        else if (soundFileName == 'game-over') {
+            sound = await Audio.Sound.createAsync(
+                require(`../assets/sounds/game-over.mp3`)
+            );
+        }
+
+        else if (soundFileName == 'fuel') {
+            sound = await Audio.Sound.createAsync(
+                require(`../assets/sounds/fuel.mp3`)
             );
         }
 
@@ -196,7 +208,7 @@ export default function Game(props: any) {
             await saveHighScoreLocally(highScore);
             await saveGlobalHighScore(highScore);
 
-
+            await playSound('game-over');
         }
     }
 
