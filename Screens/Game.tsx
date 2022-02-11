@@ -44,6 +44,13 @@ export default function Game(props: any) {
         setEntities(setupWorld());
     }, []);
 
+    useEffect(() => {
+        if (gameEngine && health === 0)
+        {
+            (gameEngine as any).dispatch({ type: "game-over" });
+        }
+    }, [health]);
+
     useEffect(() => scoreRef.current = score, [score]);
     useEffect(() => levelRef.current = level, [level]);
     useEffect(() => gameEngineRef.current = gameEngine, [gameEngine]);
@@ -137,7 +144,7 @@ export default function Game(props: any) {
 
         });
 
-        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, (Constants.MAX_HEIGHT / 3) * 2, 60, 120, { label: 'rocket' }); 
+        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, (Constants.MAX_HEIGHT / 3) * 2, 60, 120, { label: 'rocket' });
         rocket.collisionFilter = {
             group: 1,
             category: 3,
@@ -189,7 +196,7 @@ export default function Game(props: any) {
             await saveHighScoreLocally(highScore);
             await saveGlobalHighScore(highScore);
 
-            
+
         }
     }
 
@@ -315,12 +322,10 @@ export default function Game(props: any) {
 
     function reRenderCoin(rockName: string, entities: any, world: any, rock: Matter.Body) {
         let coinRenderer = BronzeCoin;
-        if (levelRef.current === 2)
-        {
+        if (levelRef.current === 2) {
             coinRenderer = SilverCoin;
         }
-        else if (levelRef.current === 3)
-        {
+        else if (levelRef.current === 3) {
             coinRenderer = GoldCoin;
         }
         const width = rock.bounds.max.x - rock.bounds.min.x;

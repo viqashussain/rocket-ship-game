@@ -11,7 +11,11 @@ function gameReducer(state = initialState, action: any) {
         case UPDATE_SCORE:
             return { ...state, score: action.payload };
         case INCREASE_HEALTH:
-            return { ...state, health: state.health + 25 };
+            if (state.health < 100)
+            {
+                return { ...state, health: state.health + 25 };
+            }
+            return state;
         case DECREASE_HEALTH:
             return { ...state, health: state.health - 25 };
         case INCREMENT_LEVEL:
