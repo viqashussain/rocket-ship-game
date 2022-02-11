@@ -9,12 +9,14 @@ import Wall from "../matter-objects/Wall"
 import { Audio } from 'expo-av';
 import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, UPDATE_SCORE } from "../redux/Actions"
 import Asteroid from "../matter-objects/Asteroid"
-import Coin from "../matter-objects/Coin"
 import Fuel from "../matter-objects/Fuel"
 import * as Haptics from 'expo-haptics';
 import { saveHighScoreLocally } from "../Storage";
 import { HighScore } from "../types/HighScore";
 import { saveGlobalHighScore } from "../Firebase"
+import BronzeCoin from "../matter-objects/BronzeCoin"
+import SilverCoin from "../matter-objects/SilverCoin"
+import GoldCoin from "../matter-objects/GoldCoin"
 
 export default function Game(props: any) {
 
@@ -178,13 +180,13 @@ export default function Game(props: any) {
     }
 
     const onEvent = async (e: any) => {
-        if (e.type === "game-over") {
-            setRunning(false);
-            setModalVisible(true);
-            const highScore: HighScore = { id: makeid(), score: score, rank: null };
-            await saveHighScoreLocally(highScore);
-            await saveGlobalHighScore(highScore);
-        }
+        // if (e.type === "game-over") {
+        //     setRunning(false);
+        //     setModalVisible(true);
+        //     const highScore: HighScore = { id: makeid(), score: score, rank: null };
+        //     await saveHighScoreLocally(highScore);
+        //     await saveGlobalHighScore(highScore);
+        // }
     }
 
     const startGame = () => {
@@ -308,6 +310,15 @@ export default function Game(props: any) {
     }
 
     function reRenderCoin(rockName: string, entities: any, world: any, rock: Matter.Body) {
+        let coinRenderer = BronzeCoin;
+        if (levelRef.current === 2)
+        {
+            coinRenderer = SilverCoin;
+        }
+        else if (levelRef.current === 3)
+        {
+            coinRenderer = GoldCoin;
+        }
         const width = rock.bounds.max.x - rock.bounds.min.x;
         const height = rock.bounds.max.y - rock.bounds.min.y;
         // if the rock already exists
@@ -318,14 +329,14 @@ export default function Game(props: any) {
                 delete entities[rockName];
 
                 Matter.World.add(world, rock);
-                entities[rockName] = { body: rock, size: [width, height], color: "blue", renderer: Coin };
+                entities[rockName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
             } else {
                 // Matter.Body.translate(entities["pipe" + i].body, { x: -1, y: 0 });
             }
         }
         else {
             Matter.World.add(world, rock);
-            entities[rockName] = { body: rock, size: [width, height], color: "blue", renderer: Coin };
+            entities[rockName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
         }
     }
 
