@@ -375,6 +375,11 @@ export default function Game(props: any) {
                     <LottieView style={styles.countdownTimer} source={require('../assets/CountDown.json')} autoPlay />
                 }
 
+                {
+                    (!showCountdownTimer && !running) &&
+                    <Text style={styles.tapToPlayText}>Tap to Play!</Text>
+                }
+
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -514,9 +519,15 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: "white",
-        fontWeight: "bold",
         textAlign: "center",
         fontFamily: 'SpaceCadetNF'
+    },
+    tapToPlayText: {
+        textAlign: "center",
+        fontFamily: 'SpaceCadetNF',
+        color: '#c3c4c6',
+        top: 500,
+        fontSize: 40
     },
     modalText: {
         marginBottom: 15,
