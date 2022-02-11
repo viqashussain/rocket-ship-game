@@ -83,24 +83,6 @@ export default function Game(props: any) {
         let engine = Matter.Engine.create({ enableSleeping: false, gravity: { scale: 0.0005 } });
         let world: Matter.World = engine.world;
 
-        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 60, 120, { label: 'rocket' });
-        rocket.collisionFilter = {
-            group: 1,
-            category: 3,
-            mask: 1
-        }
-        let ceiling = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, 25, Constants.MAX_WIDTH, 50, { isStatic: true, label: 'ceiling' });
-        ceiling.collisionFilter = {
-            group: 1,
-            category: 2,
-            mask: 0
-        }
-
-        let leftWall = Matter.Bodies.rectangle(0, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'leftWall' });
-        let rightWall = Matter.Bodies.rectangle(Constants.MAX_WIDTH, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'rightWall' });
-
-        Matter.Composite.add(world, [rocket, ceiling, leftWall, rightWall]);
-
         Matter.Events.on(engine, 'collisionStart', async (event: Matter.IEventCollision<Matter.Engine>) => {
 
             const bodyA = event.pairs[0].bodyA;
@@ -154,6 +136,24 @@ export default function Game(props: any) {
             }
 
         });
+
+        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 4, Constants.MAX_HEIGHT / 2, 60, 120, { label: 'rocket' });
+        rocket.collisionFilter = {
+            group: 1,
+            category: 3,
+            mask: 1
+        }
+        let ceiling = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, 25, Constants.MAX_WIDTH, 50, { isStatic: true, label: 'ceiling' });
+        ceiling.collisionFilter = {
+            group: 1,
+            category: 2,
+            mask: 0
+        }
+
+        let leftWall = Matter.Bodies.rectangle(0, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'leftWall' });
+        let rightWall = Matter.Bodies.rectangle(Constants.MAX_WIDTH, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'rightWall' });
+
+        Matter.Composite.add(world, [rocket, ceiling, leftWall, rightWall]);
 
         return {
             physics: { engine: engine, world: world },
