@@ -17,6 +17,7 @@ import { saveGlobalHighScore } from "../Firebase"
 import BronzeCoin from "../matter-objects/BronzeCoin"
 import SilverCoin from "../matter-objects/SilverCoin"
 import GoldCoin from "../matter-objects/GoldCoin"
+import LottieView from 'lottie-react-native'; // if you have "esModuleInterop": true
 
 export default function Game(props: any) {
 
@@ -27,6 +28,7 @@ export default function Game(props: any) {
     const [showContinueButtonOnModal, setShowContinueButtonOnModal] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [countdownValue, setCountdownValue] = useState<number | null>(3);
+    const [showCountdownTimer, setShowCountdownTimer] = useState<boolean>(false);
 
     const dispatch = useDispatch();
 
@@ -45,8 +47,7 @@ export default function Game(props: any) {
     }, []);
 
     useEffect(() => {
-        if (gameEngine && health === 0)
-        {
+        if (gameEngine && health === 0) {
             (gameEngine as any).dispatch({ type: "game-over" });
         }
     }, [health]);
@@ -144,7 +145,7 @@ export default function Game(props: any) {
 
         });
 
-        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, (Constants.MAX_HEIGHT / 3) * 2, 60, 120, { label: 'rocket' });
+        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, ((Constants.MAX_HEIGHT / 3) * 2) + 100, 60, 120, { label: 'rocket' });
         rocket.collisionFilter = {
             group: 1,
             category: 3,
@@ -213,9 +214,11 @@ export default function Game(props: any) {
     }
 
     const startGame = () => {
+        setShowCountdownTimer(true);
         let interval = setInterval(() => {
             setCountdownValue(prev => {
                 if (prev === 1) {
+                    setShowCountdownTimer(false);
                     setCountdownValue(null);
                     setRunning(true);
                     clearInterval(interval);
@@ -366,6 +369,11 @@ export default function Game(props: any) {
     return (
         <View style={styles.container}>
             <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}>
+
+                {
+                    showCountdownTimer &&
+                    <LottieView style={styles.countdownTimer} source={require('../assets/CountDown.json')} autoPlay />
+                }
 
                 <Modal
                     animationType="slide"
@@ -574,6 +582,9 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
         backgroundColor: 'yellow',
+    },
+    countdownTimer: {
+        top: 0
     }
 });
 
