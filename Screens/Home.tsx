@@ -1,4 +1,5 @@
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { useFonts } from 'expo-font';
 
 export default function HomeScreen(props: any) {
     const startGame = () => {
@@ -17,10 +18,19 @@ export default function HomeScreen(props: any) {
         props.navigation.navigate('HighScores');
     }
 
+    let [fontsLoaded] = useFonts({
+        'SpaceCadetNF': require('../assets/fonts/SpaceCadetNF.otf'),
+    });
+
+    if (!fontsLoaded) {
+        return <Text>Loading...</Text>;
+    }
+
+
     return (
         <View>
             <TouchableOpacity style={styles.playButton} onPress={startGame}>
-                <Text>Play!</Text>
+                <Text style={styles.helpButtonText}>Play!</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.settingsButton} onPress={goToSettings}>
@@ -58,5 +68,9 @@ const styles = StyleSheet.create({
         height: 200,
         width: '100%',
         backgroundColor: 'yellow'
+    },
+    helpButtonText: {
+        fontSize: 100,
+        fontFamily: 'SpaceCadetNF'
     }
 });

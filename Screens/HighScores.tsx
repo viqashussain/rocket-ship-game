@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { getGlobalHighScores } from "../Firebase";
 import { getLocalHighScores } from "../Storage";
-import { GlobalHighScore as HighScore } from "../types/HighScore";
+import { HighScore } from "../types/HighScore";
 
 export default function HighScoresScreen(props: any) {
     const goBack = () => {

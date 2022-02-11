@@ -515,11 +515,13 @@ const styles = StyleSheet.create({
     textStyle: {
         color: "white",
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: 'SpaceCadetNF'
     },
     modalText: {
         marginBottom: 15,
-        textAlign: "center"
+        textAlign: "center",
+        fontFamily: 'SpaceCadetNF'
     },
     container: {
         flex: 1,
@@ -551,18 +553,21 @@ const styles = StyleSheet.create({
         paddingTop: 50,
         zIndex: 9999,
         flexBasis: '33%',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'SpaceCadetNF'
     },
     level: {
         paddingTop: 50,
         zIndex: 9999,
-        flexBasis: '33%'
+        flexBasis: '33%',
+        fontFamily: 'SpaceCadetNF'
     },
     score: {
         paddingTop: 50,
         zIndex: 9999,
         textAlign: 'right',
-        flexBasis: '33%'
+        flexBasis: '33%',
+        fontFamily: 'SpaceCadetNF'
     },
     scoreHealthContainer: {
         flex: 1,
