@@ -1,5 +1,7 @@
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ImageBackground, Image, TouchableOpacity } from "react-native";
 import { useFonts } from 'expo-font';
+import React from "react";
+import Constants from "../Constants";
 
 export default function HomeScreen(props: any) {
     const startGame = () => {
@@ -18,59 +20,42 @@ export default function HomeScreen(props: any) {
         props.navigation.navigate('HighScores');
     }
 
-    let [fontsLoaded] = useFonts({
-        'SpaceCadetNF': require('../assets/fonts/SpaceCadetNF.otf'),
-    });
-
-    if (!fontsLoaded) {
-        return <Text>Loading...</Text>;
-    }
-
+    const imageBackground = require('../assets/img/homebackground.png');
+    const playButton = require('../assets/img/play.png');
+    const highscoreButton = require('../assets/img/highscore.png');
+    const helpButton = require('../assets/img/help.png');
 
     return (
-        <View>
-            <TouchableOpacity style={styles.playButton} onPress={startGame}>
-                <Text style={styles.helpButtonText}>Play!</Text>
-            </TouchableOpacity>
+        <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}>
 
-            <TouchableOpacity style={styles.settingsButton} onPress={goToSettings}>
-                <Text>Settings</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity onPress={startGame}>
+                    <Image source={playButton}></Image>
+                </TouchableOpacity>
 
-            <TouchableOpacity style={styles.highScoresButton} onPress={goToHighScores}>
-                <Text>High Scores</Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={goToHighScores}>
+                    <Image source={highscoreButton}></Image>
+                </TouchableOpacity>
 
-            <TouchableOpacity style={styles.helpButton} onPress={goToHelp}>
-                <Text>Help</Text>
-            </TouchableOpacity>
-        </View>
+                <TouchableOpacity onPress={goToHelp}>
+                    <Image source={helpButton}></Image>
+                </TouchableOpacity>
+            </View>
+
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
-    playButton: {
-        height: 200,
-        width: '100%',
-        backgroundColor: 'red'
+    buttonsContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        top: (Constants.MAX_HEIGHT / 3) * 2
     },
-    settingsButton: {
-        height: 200,
-        width: '100%',
-        backgroundColor: 'green'
+    backgroundImage: {
+        width: Constants.MAX_WIDTH,
+        flex: 1,
+        justifyContent: "center"
     },
-    highScoresButton: {
-        height: 200,
-        width: '100%',
-        backgroundColor: 'blue'
-    },
-    helpButton: {
-        height: 200,
-        width: '100%',
-        backgroundColor: 'yellow'
-    },
-    helpButtonText: {
-        fontSize: 100,
-        fontFamily: 'SpaceCadetNF'
-    }
 });
