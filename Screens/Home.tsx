@@ -29,16 +29,16 @@ export default function HomeScreen(props: any) {
         <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}>
 
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={startGame}>
-                    <Image source={playButton}></Image>
+                <TouchableOpacity style={styles.button} onPress={startGame}>
+                    <Image style={styles.buttonImage} source={playButton}></Image>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={goToHighScores}>
-                    <Image source={highscoreButton}></Image>
+                <TouchableOpacity style={styles.button} onPress={goToHighScores}>
+                    <Image style={styles.buttonImage} source={highscoreButton}></Image>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={goToHelp}>
-                    <Image source={helpButton}></Image>
+                <TouchableOpacity style={styles.button} onPress={goToHelp}>
+                    <Image style={styles.buttonImage} source={helpButton}></Image>
                 </TouchableOpacity>
             </View>
 
@@ -51,11 +51,18 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        top: (Constants.MAX_HEIGHT / 3) * 2
+        bottom: (-Constants.MAX_HEIGHT / 5) * 3
     },
     backgroundImage: {
         width: Constants.MAX_WIDTH,
         flex: 1,
         justifyContent: "center"
     },
+    buttonImage: {
+        resizeMode: 'contain',
+        width: 250,
+    },
+    button: {
+        height: 75
+    }
 });
