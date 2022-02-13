@@ -61,8 +61,10 @@ const styles = StyleSheet.create({
     buttonImage: {
         resizeMode: 'contain',
         width: 250,
+        height: 100
     },
     button: {
-        height: 75
+        height: 100,
+        width: 250
     }
 });
