@@ -18,6 +18,7 @@ import BronzeCoin from "../matter-objects/BronzeCoin"
 import SilverCoin from "../matter-objects/SilverCoin"
 import GoldCoin from "../matter-objects/GoldCoin"
 import LottieView from 'lottie-react-native'; // if you have "esModuleInterop": true
+import { numberWithCommas } from "./Helpers"
 
 export default function Game(props: any) {
 
@@ -398,7 +399,7 @@ export default function Game(props: any) {
                     <View style={styles.centeredView}>
                         <ImageBackground source={showContinueButtonOnModal ? pausePanel : gameoverPanel} style={styles.pausePanelImage}>
 
-                            <Text style={styles.modalText}>Score: {score}</Text>
+                            <Text style={styles.modalText}>Score: {numberWithCommas(score)}</Text>
 
                             {
                                 showContinueButtonOnModal &&
@@ -431,7 +432,7 @@ export default function Game(props: any) {
                 <View style={styles.scoreHealthContainer}>
                     <Text style={styles.level}>{level}</Text>
                     <Text style={styles.health}>{health}</Text>
-                    <Text style={styles.score}>{score}</Text>
+                    <Text style={styles.score}>{numberWithCommas(score)}</Text>
                 </View>
                 {
                     !running &&

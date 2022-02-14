@@ -32,7 +32,6 @@ export default function App() {
     async function asyncGetUserName() {
       const userName = await getUserName();
       if (!userName) {
-        console.log('here')
         setModalVisible(true);
       }
       setIsLoading(false);
@@ -40,11 +39,7 @@ export default function App() {
 
     asyncGetUserName();
   }, []);
-
-  useEffect(() => {
-    console.log(modalVisible)
-  }, [modalVisible]);
-
+  
   const save = async () => {
     if (!userName.trim()) {
       Alert.alert('Please enter a user name.');
@@ -64,7 +59,7 @@ export default function App() {
     }
   };
 
-  const imageBackground = require('./assets/img/loading.gif');
+  const imageBackground = require('./assets/img/splash.png');
 
   return (
     (isLoading || !fontsLoaded) === true ?
