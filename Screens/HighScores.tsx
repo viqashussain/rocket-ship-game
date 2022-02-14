@@ -103,9 +103,11 @@ export default function HighScoresScreen(props: any) {
                                 </View>
                             </SafeAreaView>
                         </ImageBackground>
-                        <TouchableOpacity style={styles.goBackButton} onPress={goBack}>
-                            <Image style={styles.goBackButtonImage} source={backButton}></Image>
-                        </TouchableOpacity>
+                        <View style={styles.goBackButtonContainer}>
+                            <TouchableOpacity style={styles.goBackButton} onPress={goBack}>
+                                <Image style={styles.goBackButtonImage} source={backButton}></Image>
+                            </TouchableOpacity>
+                        </View>
                     </ImageBackground>
             }
         </View>
@@ -151,8 +153,13 @@ const styles = StyleSheet.create({
     testText: {
         fontSize: 50
     },
-    goBackButton: {
+    goBackButtonContainer: {
         alignItems: 'center',
+        position: 'absolute',
+        bottom: 20,
+        width: Constants.MAX_WIDTH
+    },
+    goBackButton: {
         flex: 1,
     },
     goBackButtonImage: {
@@ -160,7 +167,6 @@ const styles = StyleSheet.create({
         width: 250,
         height: 100,
         flex: 1,
-        top: Constants.MAX_HEIGHT - 500
     },
     textStyle: {
         fontFamily: 'SpaceCadetNF',
