@@ -3,5 +3,5 @@ export function numberWithCommas(x: number) {
     {
         return;
     }
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return x.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

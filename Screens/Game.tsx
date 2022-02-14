@@ -232,6 +232,7 @@ export default function Game(props: any) {
     }
 
     const ScoreCounter = (entities: any, { touches, time }: any) => {
+        console.log(time)
 
         if (scoreRef.current > 3000 && levelRef.current === 1) {
             dispatch({ type: INCREMENT_LEVEL })
@@ -240,7 +241,7 @@ export default function Game(props: any) {
             dispatch({ type: INCREMENT_LEVEL })
         }
 
-        dispatch({ type: UPDATE_SCORE, payload: scoreRef.current + levelRef.current })
+        dispatch({ type: UPDATE_SCORE, payload: scoreRef.current + ((levelRef.current / 10) * time.delta) })
         return entities;
     }
 
