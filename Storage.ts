@@ -39,4 +39,12 @@ export const getUserName = async (): Promise<string> => {
     const username = await AsyncStorage.getItem(userNameKey);
 
     return username!;
+} 
+
+export const storeUserName = async (userName: string): Promise<void> => {
+    await AsyncStorage.setItem(userNameKey, userName);
 }
+
+// export const clear = async (): Promise<void> => {
+//     await AsyncStorage.removeItem(userNameKey);
+// }

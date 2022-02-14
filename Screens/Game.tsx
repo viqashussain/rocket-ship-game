@@ -1,6 +1,6 @@
 import Matter from "matter-js"
 import React, { createRef, useEffect, useRef, useState } from "react"
-import { View, TouchableOpacity, StatusBar, Text, StyleSheet, ImageBackground, Modal, Pressable, Alert } from "react-native"
+import { View, TouchableOpacity, StatusBar, Text, StyleSheet, ImageBackground, Modal, Pressable, Alert, Image } from "react-native"
 import { GameEngine } from "react-native-game-engine"
 import { useDispatch, useSelector } from "react-redux"
 import Rocket from "../matter-objects/Rocket"
@@ -365,6 +365,11 @@ export default function Game(props: any) {
     }
 
     const imageBackground = require('../assets/img/background.png');
+    const pausePanel = require('../assets/img/pause-panel.png');
+    const gameoverPanel = require('../assets/img/game_over-panel.png');
+    const quitButton = require('../assets/img/quit.png');
+    const restartButton = require('../assets/img/restart.png');
+    const resumeButton = require('../assets/img/resume.png');
 
     return (
         <View style={styles.container}>
@@ -388,36 +393,32 @@ export default function Game(props: any) {
                         Alert.alert("Modal has been closed.");
                         setModalVisible(!modalVisible);
                     }}
-                ><View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Game Over!</Text>
+
+                >
+                    <View style={styles.centeredView}>
+                        <ImageBackground source={showContinueButtonOnModal ? pausePanel : gameoverPanel} style={styles.pausePanelImage}>
+
                             <Text style={styles.modalText}>Score: {score}</Text>
 
                             {
                                 showContinueButtonOnModal &&
-                                <Pressable
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={() => continueGame()}>
-                                    <Text style={styles.textStyle}>Continue</Text>
-                                </Pressable>
+                                <TouchableOpacity style={styles.modalButton} onPress={() => continueGame()}>
+                                    <Image source={resumeButton} style={styles.modalButtonImage}></Image>
+                                </TouchableOpacity>
                             }
 
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => restartGame()}>
-                                <Text style={styles.textStyle}>Restart Game</Text>
-                            </Pressable>
+                            <TouchableOpacity style={styles.modalButton} onPress={() => restartGame()}>
+                                <Image source={restartButton} style={styles.modalButtonImage}></Image>
+                            </TouchableOpacity>
 
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => goToHome()}>
-                                <Text style={styles.textStyle}>Quit</Text>
-                            </Pressable>
+                            <TouchableOpacity style={styles.modalButton} onPress={() => goToHome()}>
+                                <Image source={quitButton} style={styles.modalButtonImage}></Image>
+                            </TouchableOpacity>
 
-                        </View>
+
+                        </ImageBackground>
                     </View>
                 </Modal>
-
                 {
                     running &&
                     <TouchableOpacity
@@ -463,7 +464,7 @@ export default function Game(props: any) {
 
 
             </ImageBackground>
-        </View>
+        </View >
     )
 }
 
@@ -489,22 +490,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
+        marginTop: 22,
+        flexDirection: 'column'
     },
     button: {
         borderRadius: 20,
@@ -514,8 +501,14 @@ const styles = StyleSheet.create({
     buttonOpen: {
         backgroundColor: "#F194FF",
     },
-    buttonClose: {
-        backgroundColor: "#2196F3",
+    modalButton: {
+        width: 100,
+        alignItems: 'center'
+    },
+    modalButtonImage: {
+        height: 50,
+        width: 150,
+        resizeMode: 'contain'
     },
     textStyle: {
         color: "white",
@@ -543,6 +536,14 @@ const styles = StyleSheet.create({
         width: Constants.MAX_WIDTH,
         flex: 1,
         justifyContent: "center"
+    },
+    pausePanelImage: {
+        width: Constants.MAX_WIDTH / 2,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 300,
+        position: 'absolute'
     },
     gameContainer: {
         position: 'absolute',
