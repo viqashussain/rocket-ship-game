@@ -240,7 +240,7 @@ export default function Game(props: any) {
             dispatch({ type: INCREMENT_LEVEL })
         }
 
-        dispatch({ type: UPDATE_SCORE, payload: scoreRef.current + 1 })
+        dispatch({ type: UPDATE_SCORE, payload: scoreRef.current + levelRef.current })
         return entities;
     }
 
