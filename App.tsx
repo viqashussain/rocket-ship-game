@@ -9,7 +9,7 @@ import SettingsScreen from "./Screens/Settings";
 import HighScoresScreen from "./Screens/HighScores";
 import HelpScreen from "./Screens/Help";
 import { getUserName, storeUserName } from "./Storage";
-import { Alert, ImageBackground, Modal, Pressable, StyleSheet, View, Text, TextInput } from "react-native";
+import { Alert, ImageBackground, Modal, Pressable, StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import Constants from "./Constants";
 import { isUserNameTakenInFireBase } from "./Firebase";
 import { useFonts } from "expo-font";
@@ -41,18 +41,20 @@ export default function App() {
   }, []);
 
   const save = async () => {
-    if (!userName.trim()) {
+    setUserName(userName.trim());
+    const formattedUserName = userName.trim();
+    if (!formattedUserName) {
       Alert.alert('Please enter a user name.');
       return;
     }
-    const isUserNameTakenInFirebaseConst = await isUserNameTakenInFireBase(userName);
+    const isUserNameTakenInFirebaseConst = await isUserNameTakenInFireBase(formattedUserName);
     setIsLoading(false);
     if (isUserNameTakenInFirebaseConst) {
       setIsUserNameTaken(true);
-      setTakenUserName(userName);
+      setTakenUserName(formattedUserName);
     }
     else {
-      await storeUserName(userName);
+      await storeUserName(formattedUserName);
       setModalVisible(false);
       setTakenUserName('');
     }
@@ -60,6 +62,7 @@ export default function App() {
 
   const imageBackground = require('./assets/img/splash.png');
   const modalBackground = require('./assets/img/modalpanel.png');
+  const saveButton = require('./assets/img/save.png');
 
   return (
     (isLoading || !fontsLoaded) === true ?
@@ -75,21 +78,19 @@ export default function App() {
         >
           <View style={styles.centeredView}>
             <ImageBackground source={modalBackground} style={styles.modalPanelBackgroundImage}>
-                <Text style={styles.modalText}>Please enter a user name. This will be used save your high scores.</Text>
-                {
-                  isUserNameTaken &&
-                  <Text style={styles.modalText}>
-                    The user name {takenUserName} is taken, please enter a different user name.
-                  </Text>
-                }
-                <TextInput style={styles.input} onChangeText={setUserName} />
+              <Text style={styles.modalText}>Please enter a user name. This will be used save your high scores.</Text>
+              {
+                isUserNameTaken &&
+                <Text style={styles.modalText}>
+                  The user name {takenUserName} is taken, please enter a different user name.
+                </Text>
+              }
+              <TextInput style={styles.input} onChangeText={setUserName} />
 
 
-                <Pressable
-                  style={[styles.button]}
-                  onPress={async () => save()}>
-                  <Text style={styles.textStyle}>Save</Text>
-                </Pressable>
+              <TouchableOpacity style={styles.modalButton} onPress={save}>
+                <Image source={saveButton} style={styles.modalButtonImage}></Image>
+              </TouchableOpacity>
 
             </ImageBackground>
           </View>
@@ -152,5 +153,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     padding: 20,
     resizeMode: 'contain'
-  }
+  },
+  modalButton: {
+    width: 100,
+    alignItems: 'center'
+  },
+  modalButtonImage: {
+    height: 50,
+    width: 150,
+    resizeMode: 'contain'
+  },
 });
