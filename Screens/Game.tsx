@@ -278,6 +278,10 @@ export default function Game(props: any) {
         group: -2,
     }
 
+    const fuelCollisionFilter = {
+        group: -2,
+    }
+
     const bigRock1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock1', collisionFilter: rockCollisionFilter });
     const bigRock2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock2', collisionFilter: rockCollisionFilter });
     const bigRock3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.asteroid), -200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock3', collisionFilter: rockCollisionFilter });
@@ -285,6 +289,9 @@ export default function Game(props: any) {
     const coin1 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin1', collisionFilter: coinCollisionFilter });
     const coin2 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin2', collisionFilter: coinCollisionFilter });
     const coin3 = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.coin), -200, objectSizes.coin, objectSizes.coin, { label: 'coin3', collisionFilter: coinCollisionFilter });
+
+    const fuel = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.fuel), -200, objectSizes.fuel, objectSizes.fuel, { label: 'fuel', collisionFilter: fuelCollisionFilter });
+
 
     const Physics = (entities: any, { touches, time }: any) => {
         let engine: Matter.Engine = entities.physics.engine;
@@ -327,7 +334,6 @@ export default function Game(props: any) {
         const timeSeconds = new Date(time.current).getSeconds();
 
         if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL === 0 && !fuelHasBeenAdded) {
-            const fuel = Matter.Bodies.rectangle(getXCoOrdForObjectInsertion(objectSizes.fuel), -200, objectSizes.fuel, objectSizes.fuel, { label: 'fuel' });
             Matter.World.add(world, fuel);
             entities.fuel = { body: fuel, size: [objectSizes.fuel, objectSizes.fuel], renderer: Fuel };
             setFuelHasBeenAdded(true);
