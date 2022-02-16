@@ -39,7 +39,7 @@ export default function App() {
 
     asyncGetUserName();
   }, []);
-  
+
   const save = async () => {
     if (!userName.trim()) {
       Alert.alert('Please enter a user name.');
@@ -59,6 +59,7 @@ export default function App() {
   };
 
   const imageBackground = require('./assets/img/splash.png');
+  const modalBackground = require('./assets/img/modalpanel.png');
 
   return (
     (isLoading || !fontsLoaded) === true ?
@@ -73,24 +74,24 @@ export default function App() {
           visible={modalVisible}
         >
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Please enter a user name. This will be used save your high scores.</Text>
-              {
-                isUserNameTaken &&
-                <Text style={styles.modalText}>
-                  The user name {takenUserName} is taken, please enter a different user name.
-                </Text>
-              }
-              <TextInput style={styles.input} onChangeText={setUserName} />
+            <ImageBackground source={modalBackground} style={styles.modalPanelBackgroundImage}>
+                <Text style={styles.modalText}>Please enter a user name. This will be used save your high scores.</Text>
+                {
+                  isUserNameTaken &&
+                  <Text style={styles.modalText}>
+                    The user name {takenUserName} is taken, please enter a different user name.
+                  </Text>
+                }
+                <TextInput style={styles.input} onChangeText={setUserName} />
 
 
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={async () => save()}>
-                <Text style={styles.textStyle}>Save</Text>
-              </Pressable>
+                <Pressable
+                  style={[styles.button]}
+                  onPress={async () => save()}>
+                  <Text style={styles.textStyle}>Save</Text>
+                </Pressable>
 
-            </View>
+            </ImageBackground>
           </View>
         </Modal>
         <NavigationContainer>
@@ -118,42 +119,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
     fontFamily: 'SpaceCadetNF'
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    marginTop: 20
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+    marginTop: 20,
+    backgroundColor: '#9c9f9c',
+    color: 'black'
   },
   textStyle: {
-    color: "white",
     textAlign: "center",
     fontFamily: 'SpaceCadetNF'
   },
@@ -162,6 +143,14 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
-    width: Constants.MAX_WIDTH / 2
+    width: Constants.MAX_WIDTH / 2,
+    backgroundColor: 'white'
   },
+  modalPanelBackgroundImage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    padding: 20,
+    resizeMode: 'contain'
+  }
 });
