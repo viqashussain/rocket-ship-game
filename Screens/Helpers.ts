@@ -1,5 +1,5 @@
 export function numberWithCommas(x: any) {
-    if (!x)
+    if (!x && x !== 0)
     {
         return;
     }
