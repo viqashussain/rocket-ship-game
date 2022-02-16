@@ -27,6 +27,13 @@ export default function Game(props: any) {
     const health50Image = require('../assets/img/50health.png');
     const health25Image = require('../assets/img/25health.png');
 
+    // randmomize the first time the coins fall
+    const coinsFallTime = [
+        Math.random(),
+        Math.random(),
+        Math.random()
+    ];
+
     const [gameEngine, setGameEngine]: any = useState<Matter.Engine>();
     const [running, setRunning] = useState<boolean>(false);
     const [entities, setEntities]: any = useState(null);
@@ -35,6 +42,7 @@ export default function Game(props: any) {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [countdownValue, setCountdownValue] = useState<number | null>(3);
     const [showCountdownTimer, setShowCountdownTimer] = useState<boolean>(false);
+    const [allThreeCoinsHaveBeenIntroduced, setAllThreeCoinsHaveBeenIntroduced] = useState<boolean>(false);
     const [healthImageToUse, setHealthImageToUse] = useState<any>(health100Image);
 
     const dispatch = useDispatch();
@@ -52,23 +60,19 @@ export default function Game(props: any) {
         dispatch({ type: RESET_GAME });
         setEntities(setupWorld());
     }, []);
-    
+
     useEffect(() => {
-        if (health === 100)
-        {
-            setHealthImageToUse(health100Image);   
+        if (health === 100) {
+            setHealthImageToUse(health100Image);
         }
-        else if (health === 75)
-        {
-            setHealthImageToUse(health75Image);   
+        else if (health === 75) {
+            setHealthImageToUse(health75Image);
         }
-        else if (health === 50)
-        {
-            setHealthImageToUse(health50Image);   
+        else if (health === 50) {
+            setHealthImageToUse(health50Image);
         }
-        else if (health === 25)
-        {
-            setHealthImageToUse(health25Image);   
+        else if (health === 25) {
+            setHealthImageToUse(health25Image);
         }
     }, [health]);
 
@@ -374,7 +378,7 @@ export default function Game(props: any) {
         }
     }
 
-    function reRenderCoin(rockName: string, entities: any, world: any, rock: Matter.Body) {
+    function reRenderCoin(coinName: string, entities: any, world: any, rock: Matter.Body) {
         let coinRenderer = BronzeCoin;
         if (levelRef.current === 2) {
             coinRenderer = SilverCoin;
@@ -385,21 +389,36 @@ export default function Game(props: any) {
         const width = rock.bounds.max.x - rock.bounds.min.x;
         const height = rock.bounds.max.y - rock.bounds.min.y;
         // if the rock already exists
-        if (entities[rockName]) {
+        if (entities[coinName]) {
             // if the rock has fallen out of the bottom of the screen
-            if (entities[rockName].body.position.y > Constants.MAX_HEIGHT) {
-                Matter.World.remove(world, entities[rockName].body);
-                delete entities[rockName];
+            if (entities[coinName].body.position.y > Constants.MAX_HEIGHT) {
+                Matter.World.remove(world, entities[coinName].body);
+                delete entities[coinName];
 
                 Matter.World.add(world, rock);
-                entities[rockName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
+                entities[coinName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
             } else {
                 // Matter.Body.translate(entities["pipe" + i].body, { x: -1, y: 0 });
             }
         }
         else {
-            Matter.World.add(world, rock);
-            entities[rockName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
+            if (!allThreeCoinsHaveBeenIntroduced) {
+                const coinNumberIndex = parseInt(coinName.substring(4, 5)) - 1;
+                if ((score / 100) > coinsFallTime[coinNumberIndex]) {
+                    console.log(coinName)
+                    Matter.World.add(world, rock);
+                    entities[coinName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
+                    
+                    if (entities['coin1'] && entities['coin2'] && entities['coin3'])
+                    {
+                        setAllThreeCoinsHaveBeenIntroduced(true);
+                    }
+                }
+            }
+            else {
+                Matter.World.add(world, rock);
+                entities[coinName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
+            }
         }
     }
 
