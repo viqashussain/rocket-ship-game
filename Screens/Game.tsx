@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
         width: Constants.MAX_WIDTH,
     },
     pauseGameButton: {
-        zIndex: 9999,
+        zIndex: 999999999,
         height: 50,
         width: 50,
         justifyContent: 'flex-end',
