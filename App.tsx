@@ -8,7 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from "./Screens/Settings";
 import HighScoresScreen from "./Screens/HighScores";
 import HelpScreen from "./Screens/Help";
-import { clear, getUserName, storeUserName } from "./Storage";
+import { getUserName, storeUserName } from "./Storage";
 import { Alert, ImageBackground, Modal, Pressable, StyleSheet, View, Text, TextInput } from "react-native";
 import Constants from "./Constants";
 import { isUserNameTakenInFireBase } from "./Firebase";
@@ -45,7 +45,6 @@ export default function App() {
       Alert.alert('Please enter a user name.');
       return;
     }
-    setIsLoading(true);
     const isUserNameTakenInFirebaseConst = await isUserNameTakenInFireBase(userName);
     setIsLoading(false);
     if (isUserNameTakenInFirebaseConst) {
