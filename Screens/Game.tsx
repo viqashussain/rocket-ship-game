@@ -22,6 +22,11 @@ import { numberWithCommas } from "./Helpers"
 
 export default function Game(props: any) {
 
+    const health100Image = require('../assets/img/100health.png');
+    const health75Image = require('../assets/img/75health.png');
+    const health50Image = require('../assets/img/50health.png');
+    const health25Image = require('../assets/img/25health.png');
+
     const [gameEngine, setGameEngine]: any = useState<Matter.Engine>();
     const [running, setRunning] = useState<boolean>(false);
     const [entities, setEntities]: any = useState(null);
@@ -30,6 +35,7 @@ export default function Game(props: any) {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [countdownValue, setCountdownValue] = useState<number | null>(3);
     const [showCountdownTimer, setShowCountdownTimer] = useState<boolean>(false);
+    const [healthImageToUse, setHealthImageToUse] = useState<any>(health100Image);
 
     const dispatch = useDispatch();
 
@@ -46,6 +52,25 @@ export default function Game(props: any) {
         dispatch({ type: RESET_GAME });
         setEntities(setupWorld());
     }, []);
+    
+    useEffect(() => {
+        if (health === 100)
+        {
+            setHealthImageToUse(health100Image);   
+        }
+        else if (health === 75)
+        {
+            setHealthImageToUse(health75Image);   
+        }
+        else if (health === 50)
+        {
+            setHealthImageToUse(health50Image);   
+        }
+        else if (health === 25)
+        {
+            setHealthImageToUse(health25Image);   
+        }
+    }, [health]);
 
     useEffect(() => {
         if (gameEngine && health === 0) {
@@ -378,6 +403,8 @@ export default function Game(props: any) {
     const quitButton = require('../assets/img/quit.png');
     const restartButton = require('../assets/img/restart.png');
     const resumeButton = require('../assets/img/resume.png');
+    const scoreboard = require('../assets/img/scoreboard.png');
+    const pauseButton = require('../assets/img/pause.png');
 
     return (
         <View style={styles.container}>
@@ -428,18 +455,18 @@ export default function Game(props: any) {
                     </View>
                 </Modal>
                 {
-                    running &&
                     <TouchableOpacity
                         onPress={() => pauseGame()}
                         style={styles.pauseGameButton}
                     >
-                        <Text>Pause</Text>
+                        <Image style={styles.pauseGameButton} source={pauseButton}></Image>
                     </TouchableOpacity>
                 }
                 <View style={styles.scoreHealthContainer}>
-                    <Text style={styles.level}>{level}</Text>
-                    <Text style={styles.health}>{health}</Text>
-                    <Text style={styles.score}>{numberWithCommas(score)}</Text>
+                    <Image style={styles.health} source={healthImageToUse}></Image>
+                    <ImageBackground style={styles.score} source={scoreboard}>
+                        <Text style={styles.scoreText}>{numberWithCommas(score)}</Text>
+                    </ImageBackground>
                 </View>
                 {
                     !running &&
@@ -527,8 +554,10 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: 'SpaceCadetNF',
         color: '#c3c4c6',
-        top: 500,
-        fontSize: 40
+        fontSize: 40,
+        position: 'absolute',
+        flex: 1,
+        top: Constants.MAX_HEIGHT / 2, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'
     },
     modalText: {
         marginBottom: 15,
@@ -572,28 +601,35 @@ const styles = StyleSheet.create({
     health: {
         paddingTop: 50,
         zIndex: 9999,
-        flexBasis: '33%',
-        textAlign: 'center',
-        fontFamily: 'SpaceCadetNF'
-    },
-    level: {
-        paddingTop: 50,
-        zIndex: 9999,
-        flexBasis: '33%',
-        fontFamily: 'SpaceCadetNF'
+        height: 75,
+        width: 75,
+        resizeMode: 'contain',
+        flexBasis: '50%',
+        justifyContent: 'flex-start'
     },
     score: {
         paddingTop: 50,
         zIndex: 9999,
-        textAlign: 'right',
-        flexBasis: '33%',
-        fontFamily: 'SpaceCadetNF'
+        height: 60,
+        resizeMode: 'contain',
+        flexBasis: '50%'
+    },
+    scoreText: {
+        color: 'white',
+        fontSize: 20,
+        paddingTop: 30,
+        paddingLeft: 10,
+        position: 'absolute',
+        fontFamily: 'SpaceCadetNF',
     },
     scoreHealthContainer: {
-        flex: 1,
+        flex: 2,
         flexWrap: 'wrap',
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        marginTop: 30,
+        position: 'absolute',
+        top: 0
     },
     startGameButton: {
         zIndex: 9999,
@@ -603,10 +639,12 @@ const styles = StyleSheet.create({
     },
     pauseGameButton: {
         zIndex: 9999,
-        fontSize: 50,
         height: 50,
         width: 50,
-        backgroundColor: 'yellow',
+        justifyContent: 'flex-end',
+        position: 'absolute',
+        top: 0,
+        right: 0
     },
     countdownTimer: {
         top: 0
