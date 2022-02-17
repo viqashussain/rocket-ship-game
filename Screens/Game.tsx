@@ -405,7 +405,6 @@ export default function Game(props: any) {
             if (!allThreeCoinsHaveBeenIntroduced) {
                 const coinNumberIndex = parseInt(coinName.substring(4, 5)) - 1;
                 if ((score / 100) > coinsFallTime[coinNumberIndex]) {
-                    console.log(coinName)
                     Matter.World.add(world, rock);
                     entities[coinName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
                     
