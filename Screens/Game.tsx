@@ -177,18 +177,17 @@ export default function Game(props: any) {
         });
 
         const rocket = Matter.Bodies.fromVertices(
-            Constants.MAX_WIDTH / 2, ((Constants.MAX_HEIGHT / 3) * 2), rocketVerticies as any, {}, true
+            Constants.MAX_WIDTH / 2, ((Constants.MAX_HEIGHT / 3) * 2), rocketVerticies as any, {
+                label: 'rocket',
+                collisionFilter: {
+                    group: 1,
+                    category: 3,
+                    mask: 1
+                },
+            }, true
         );
         Matter.Body.scale(rocket, 0.04, 0.04);
         Matter.Body.rotate(rocket, Math.PI)
-
-        rocket.collisionFilter = {
-            group: 1,
-            category: 3,
-            mask: 1
-        };
-        // rocket.isStatic = true;
-        rocket.label = 'rocket';
 
         const rocketWidth = rocket.bounds.max.x - rocket.bounds.min.x;
         const rocketHeight = rocket.bounds.max.y - rocket.bounds.min.y;
@@ -315,7 +314,7 @@ export default function Game(props: any) {
         const world: Matter.World = entities.physics.world;
 
         touches.filter((t: any) => t.type === "press").forEach((t: any) => {
-            const forceScale = 0.1;
+            const forceScale = 0.075;
             const locationX = t.event.locationX;
             const isLeftTouch = locationX < (Constants.MAX_WIDTH / 2);
             Matter.Body.rotate(rocket, Math.PI / 6);
