@@ -19,6 +19,7 @@ import SilverCoin from "../matter-objects/SilverCoin"
 import GoldCoin from "../matter-objects/GoldCoin"
 import LottieView from 'lottie-react-native'; // if you have "esModuleInterop": true
 import { numberWithCommas } from "./Helpers"
+import { coinVerticies, rocketVerticies, fuelVerticies } from "../verticies"
 
 export default function Game(props: any) {
 
@@ -175,12 +176,23 @@ export default function Game(props: any) {
 
         });
 
-        let rocket = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, ((Constants.MAX_HEIGHT / 3) * 2) + 100, 60, 120, { label: 'rocket' });
+        const rocket = Matter.Bodies.fromVertices(
+            Constants.MAX_WIDTH / 2, ((Constants.MAX_HEIGHT / 3) * 2), rocketVerticies as any, {}, true
+        );
+        Matter.Body.scale(rocket, 0.04, 0.04);
+        Matter.Body.rotate(rocket, Math.PI)
+
         rocket.collisionFilter = {
             group: 1,
             category: 3,
             mask: 1
-        }
+        };
+        // rocket.isStatic = true;
+        rocket.label = 'rocket';
+
+        const rocketWidth = rocket.bounds.max.x - rocket.bounds.min.x;
+        const rocketHeight = rocket.bounds.max.y - rocket.bounds.min.y;
+
         let ceiling = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, 25, Constants.MAX_WIDTH, 50, { isStatic: true, label: 'ceiling' });
         ceiling.collisionFilter = {
             group: 1,
@@ -195,7 +207,7 @@ export default function Game(props: any) {
 
         return {
             physics: { engine: engine, world: world },
-            rocket: { body: rocket, size: [45, 117], color: 'red', renderer: Rocket },
+            rocket: { body: rocket, size: [rocketWidth, rocketHeight], color: 'red', renderer: Rocket },
             ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 10], color: "transparent", renderer: Wall },
             leftWall: { body: leftWall, size: [5, Constants.MAX_HEIGHT * 2], color: "transparent", renderer: Wall },
             rightWall: { body: rightWall, size: [5, Constants.MAX_HEIGHT * 2], color: "transparent", renderer: Wall },
@@ -334,12 +346,15 @@ export default function Game(props: any) {
         reRenderCoin('coin2', entities, world, coin2);
         reRenderCoin('coin3', entities, world, coin3);
 
+        const fuelWidth = fuel.bounds.max.x - fuel.bounds.min.x;
+        const fuelHeight = fuel.bounds.max.y - fuel.bounds.min.y;
+
         //add a fuel item every 10 seconds
         const timeSeconds = new Date(time.current).getSeconds();
 
         if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL === 0 && !fuelHasBeenAdded) {
             Matter.World.add(world, fuel);
-            entities.fuel = { body: fuel, size: [objectSizes.fuel, objectSizes.fuel], renderer: Fuel };
+            entities.fuel = { body: fuel, size: [fuelWidth, fuelHeight], renderer: Fuel };
             setFuelHasBeenAdded(true);
         }
         else if (timeSeconds % Constants.ADD_FUEL_SECOND_INTERVAL !== 0) {
