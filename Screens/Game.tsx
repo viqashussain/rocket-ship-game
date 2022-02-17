@@ -503,6 +503,7 @@ export default function Game(props: any) {
                 }
                 <View style={styles.scoreHealthContainer}>
                     <Image style={styles.health} source={healthImageToUse}></Image>
+                    <View style={styles.emptySpace}></View>
                     <ImageBackground style={styles.score} source={scoreboard}>
                         <Text style={styles.scoreText}>{numberWithCommas(score)}</Text>
                     </ImageBackground>
@@ -634,21 +635,27 @@ const styles = StyleSheet.create({
     countdownText: {
         textAlign: 'center'
     },
+    emptySpace: {
+        flexBasis: '25%',
+    },
     health: {
         paddingTop: 50,
         zIndex: 9999,
         height: 75,
         width: 75,
         resizeMode: 'contain',
-        flexBasis: '50%',
-        justifyContent: 'flex-start'
+        flexBasis: '25%',
+        justifyContent: 'flex-start',
+        alignContent: 'flex-start'
     },
     score: {
         paddingTop: 50,
         zIndex: 9999,
         height: 60,
         resizeMode: 'contain',
-        flexBasis: '50%'
+        flexBasis: '50%',
+        justifyContent: 'flex-start',
+        alignContent: 'flex-start'
     },
     scoreText: {
         color: 'white',
@@ -659,7 +666,6 @@ const styles = StyleSheet.create({
         fontFamily: 'SpaceCadetNF',
     },
     scoreHealthContainer: {
-        flex: 2,
         flexWrap: 'wrap',
         flexDirection: 'row',
         justifyContent: 'flex-end',
