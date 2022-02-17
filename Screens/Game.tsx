@@ -213,29 +213,26 @@ export default function Game(props: any) {
         }
     }
 
+    const coinSound = require(`../assets/sounds/coin.mp3`);
+    const explosionSound = require(`../assets/sounds/explosion.mp3`);
+    const gameOverSound = require(`../assets/sounds/game-over.mp3`);
+    const fuelSound = require(`../assets/sounds/fuel.mp3`);
+
     const playSound = async (soundFileName: string) => {
         let sound;
         if (soundFileName == 'coin') {
-            sound = await Audio.Sound.createAsync(
-                require(`../assets/sounds/coin.mp3`)
-            );
+            sound = await Audio.Sound.createAsync(coinSound);
         }
         else if (soundFileName == 'explosion') {
-            sound = await Audio.Sound.createAsync(
-                require(`../assets/sounds/explosion.mp3`)
-            );
+            sound = await Audio.Sound.createAsync(explosionSound);
         }
 
         else if (soundFileName == 'game-over') {
-            sound = await Audio.Sound.createAsync(
-                require(`../assets/sounds/game-over.mp3`)
-            );
+            sound = await Audio.Sound.createAsync(gameOverSound);
         }
 
         else if (soundFileName == 'fuel') {
-            sound = await Audio.Sound.createAsync(
-                require(`../assets/sounds/fuel.mp3`)
-            );
+            sound = await Audio.Sound.createAsync(fuelSound);
         }
 
 
