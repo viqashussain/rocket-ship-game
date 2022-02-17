@@ -13,7 +13,7 @@ export default class GoldCoin extends Component<Props, {}> {
         const x = this.props.body.position.x - width / 2;
         const y = this.props.body.position.y - height / 2;
 
-        const image = require('../assets/img/goldcoin.png');
+        const image = require('../assets/img/goldcoin.gif');
 
         return (
             <Image

@@ -13,7 +13,7 @@ export default class SilverCoin extends Component<Props, {}> {
         const x = this.props.body.position.x - width / 2;
         const y = this.props.body.position.y - height / 2;
 
-        const image = require('../assets/img/silvercoin.png');
+        const image = require('../assets/img/silvercoin.gif');
 
         return (
             <Image
