@@ -515,9 +515,6 @@ export default function Game(props: any) {
                     ></TouchableOpacity>
                 }
 
-                <View style={styles.countdownContainer}>
-                    <Text style={styles.countdownText}>{countdownValue}</Text>
-                </View>
                 {
                     entities != null ?
                         <GameEngine
