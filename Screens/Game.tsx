@@ -60,9 +60,6 @@ export default function Game(props: any) {
 
     // setup world on load
     useEffect(() => {
-        const fs = PixelRatio.getFontScale()
-        const l = PixelRatio.get();
-
         dispatch({ type: RESET_GAME });
         setEntities(setupWorld());
     }, []);
@@ -191,7 +188,8 @@ export default function Game(props: any) {
             },
         }, true
         );
-        Matter.Body.scale(rocket, 0.04, 0.04);
+        const rocketScale = 0.12 / PixelRatio.get();
+        Matter.Body.scale(rocket, rocketScale, rocketScale);
         Matter.Body.rotate(rocket, Math.PI)
 
         const rocketWidth = rocket.bounds.max.x - rocket.bounds.min.x;
