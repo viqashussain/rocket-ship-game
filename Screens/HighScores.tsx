@@ -41,7 +41,7 @@ export default function HighScoresScreen(props: any) {
 
             setLocalHighScores(localHighScores);
             setGlobalHighScores(globalHighScores);
-            setIsLoading(false);
+            // setIsLoading(false);
         }
 
         fetchAllLocalHighScores();
@@ -65,16 +65,19 @@ export default function HighScoresScreen(props: any) {
     }
 
     const background = require('../assets/img/highscore-background.png');
-    const loadingBackground = require('../assets/img/splash.png');
+    const loadingBackground = require('../assets/img/loading_bg.png');
     const panel = require('../assets/img/highscore-panel.png');
     const backButton = require('../assets/img/back.png');
+    const loadingText = require('../assets/img/loading_text.png');
 
     return (
         <View style={styles.container}>
 
             {
                 isLoading ?
-                    <ImageBackground source={loadingBackground} resizeMode="cover" style={styles.backgroundImage}></ImageBackground>
+                    <ImageBackground source={loadingBackground} resizeMode="cover" style={styles.backgroundImage}>
+                        <Image resizeMode="contain" style={styles.loadingText} source={loadingText}></Image>
+                    </ImageBackground>
                     :
 
                     <ImageBackground resizeMode="stretch" source={background} style={styles.backgroundImage}>
@@ -176,5 +179,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
         flex: 2,
-    }
+    },
+    loadingText: {
+        position: 'absolute',
+        bottom: 0,
+        width: Constants.MAX_WIDTH - 100,
+        margin: 50
+      },
 });
