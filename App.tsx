@@ -61,13 +61,17 @@ export default function App() {
   };
 
   const imageBackground = require('./assets/img/splash.png');
+  const loadingBackground = require('./assets/img/loading_bg.png');
+  const loadingText = require('./assets/img/loading_text.png');
   const modalBackground = require('./assets/img/modalpanel.png');
   const saveButton = require('./assets/img/save.png');
 
   return (
     (isLoading || !fontsLoaded) === true ?
 
-      <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}></ImageBackground>
+      <ImageBackground source={loadingBackground} resizeMode="cover" style={styles.backgroundImage}>
+        <Image resizeMode="contain" style={styles.loadingText} source={loadingText}></Image>
+      </ImageBackground>
 
       :
       <React.Fragment>
@@ -115,6 +119,12 @@ const styles = StyleSheet.create({
     width: Constants.MAX_WIDTH,
     flex: 1,
     justifyContent: "center"
+  },
+  loadingText: {
+    position: 'absolute',
+    bottom: 0,
+    width: Constants.MAX_WIDTH - 100,
+    margin: 50
   },
   centeredView: {
     flex: 1,

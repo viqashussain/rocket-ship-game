@@ -1,6 +1,6 @@
 import Matter from "matter-js"
 import React, { createRef, useEffect, useRef, useState } from "react"
-import { View, TouchableOpacity, StatusBar, Text, StyleSheet, ImageBackground, Modal, Pressable, Alert, Image } from "react-native"
+import { View, TouchableOpacity, StatusBar, Text, StyleSheet, ImageBackground, Modal, Pressable, Alert, Image, PixelRatio, Platform } from "react-native"
 import { GameEngine } from "react-native-game-engine"
 import { useDispatch, useSelector } from "react-redux"
 import Rocket from "../matter-objects/Rocket"
@@ -20,6 +20,8 @@ import GoldCoin from "../matter-objects/GoldCoin"
 import LottieView from 'lottie-react-native'; // if you have "esModuleInterop": true
 import { numberWithCommas } from "./Helpers"
 import { coinVerticies, rocketVerticies, fuelVerticies } from "../verticies"
+import FitImage from 'react-native-fit-image';
+
 
 export default function Game(props: any) {
 
@@ -58,6 +60,9 @@ export default function Game(props: any) {
 
     // setup world on load
     useEffect(() => {
+        const fs = PixelRatio.getFontScale()
+        const l = PixelRatio.get();
+
         dispatch({ type: RESET_GAME });
         setEntities(setupWorld());
     }, []);
@@ -178,13 +183,13 @@ export default function Game(props: any) {
 
         const rocket = Matter.Bodies.fromVertices(
             Constants.MAX_WIDTH / 2, ((Constants.MAX_HEIGHT / 3) * 2), rocketVerticies as any, {
-                label: 'rocket',
-                collisionFilter: {
-                    group: 1,
-                    category: 3,
-                    mask: 1
-                },
-            }, true
+            label: 'rocket',
+            collisionFilter: {
+                group: 1,
+                category: 3,
+                mask: 1
+            },
+        }, true
         );
         Matter.Body.scale(rocket, 0.04, 0.04);
         Matter.Body.rotate(rocket, Math.PI)
@@ -418,9 +423,8 @@ export default function Game(props: any) {
                 if ((score / 100) > coinsFallTime[coinNumberIndex]) {
                     Matter.World.add(world, rock);
                     entities[coinName] = { body: rock, size: [width, height], color: "blue", renderer: coinRenderer };
-                    
-                    if (entities['coin1'] && entities['coin2'] && entities['coin3'])
-                    {
+
+                    if (entities['coin1'] && entities['coin2'] && entities['coin3']) {
                         setAllThreeCoinsHaveBeenIntroduced(true);
                     }
                 }
@@ -498,9 +502,13 @@ export default function Game(props: any) {
                     </TouchableOpacity>
                 }
                 <View style={styles.scoreHealthContainer}>
-                    <Image style={styles.health} source={healthImageToUse}></Image>
+                    <Image style={styles.health} resizeMode="stretch" source={healthImageToUse}></Image>
                     <View style={styles.emptySpace}></View>
-                    <ImageBackground style={styles.score} source={scoreboard}>
+                    {/* <FitImage
+                        source={scoreboard}
+                        style={styles.score}
+                    /> */}
+                    <ImageBackground resizeMode="stretch" style={styles.score} source={scoreboard}>
                         <Text style={styles.scoreText}>{numberWithCommas(score)}</Text>
                     </ImageBackground>
                 </View>
@@ -559,7 +567,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        height: 100
     },
     button: {
         borderRadius: 20,
@@ -637,29 +646,21 @@ const styles = StyleSheet.create({
     health: {
         paddingTop: 50,
         zIndex: 9999,
-        height: 75,
-        width: 75,
-        resizeMode: 'contain',
-        flexBasis: '25%',
-        justifyContent: 'flex-start',
-        alignContent: 'flex-start'
+        width: Constants.MAX_WIDTH / 4,
+        height: 100,
+        resizeMode: 'contain'
     },
     score: {
-        paddingTop: 50,
-        zIndex: 9999,
-        height: 60,
-        resizeMode: 'contain',
-        flexBasis: '50%',
-        justifyContent: 'flex-start',
-        alignContent: 'flex-start'
+        width: Constants.MAX_WIDTH / 2,
+        height: 225 / PixelRatio.get()
     },
     scoreText: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 20 * PixelRatio.getFontScale(),
         paddingTop: 30,
         paddingLeft: 10,
-        position: 'absolute',
-        fontFamily: 'SpaceCadetNF',
+        position: 'absolute', 
+        fontFamily: 'SpaceCadetNF', 
     },
     scoreHealthContainer: {
         flexWrap: 'wrap',
