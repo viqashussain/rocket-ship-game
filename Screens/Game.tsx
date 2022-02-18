@@ -18,7 +18,7 @@ import BronzeCoin from "../matter-objects/BronzeCoin"
 import SilverCoin from "../matter-objects/SilverCoin"
 import GoldCoin from "../matter-objects/GoldCoin"
 import LottieView from 'lottie-react-native'; // if you have "esModuleInterop": true
-import { numberWithCommas } from "./Helpers"
+import { normalize, numberWithCommas } from "./Helpers"
 import { coinVerticies, rocketVerticies, fuelVerticies } from "../verticies"
 import FitImage from 'react-native-fit-image';
 
@@ -470,7 +470,7 @@ export default function Game(props: any) {
 
                 >
                     <View style={styles.centeredView}>
-                        <ImageBackground source={showContinueButtonOnModal ? pausePanel : gameoverPanel} style={styles.pausePanelImage}>
+                        <ImageBackground resizeMode="contain" source={showContinueButtonOnModal ? pausePanel : gameoverPanel} style={styles.pausePanelImage}>
 
                             <Text style={styles.modalText}>Score: {numberWithCommas(score)}</Text>
 
@@ -498,16 +498,12 @@ export default function Game(props: any) {
                         onPress={() => pauseGame()}
                         style={styles.pauseGameButton}
                     >
-                        <Image style={styles.pauseGameButton} source={pauseButton}></Image>
+                        <Image resizeMode="contain" style={styles.pauseGameButton} source={pauseButton}></Image>
                     </TouchableOpacity>
                 }
                 <View style={styles.scoreHealthContainer}>
                     <Image style={styles.health} resizeMode="stretch" source={healthImageToUse}></Image>
                     <View style={styles.emptySpace}></View>
-                    {/* <FitImage
-                        source={scoreboard}
-                        style={styles.score}
-                    /> */}
                     <ImageBackground resizeMode="stretch" style={styles.score} source={scoreboard}>
                         <Text style={styles.scoreText}>{numberWithCommas(score)}</Text>
                     </ImageBackground>
@@ -579,12 +575,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#F194FF",
     },
     modalButton: {
-        width: 100,
         alignItems: 'center'
     },
     modalButtonImage: {
-        height: 50,
-        width: 150,
+        height: Constants.MAX_WIDTH / 8,
         resizeMode: 'contain'
     },
     textStyle: {
@@ -596,13 +590,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: 'SpaceCadetNF',
         color: '#c3c4c6',
-        fontSize: 40,
+        fontSize: normalize(50),
         position: 'absolute',
         flex: 1,
         top: Constants.MAX_HEIGHT / 2, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'
     },
     modalText: {
-        marginBottom: 15,
+        fontSize: normalize(25),
+        paddingTop: 130 / PixelRatio.get(),
+        marginBottom: 20,
         textAlign: "center",
         fontFamily: 'SpaceCadetNF'
     },
@@ -621,7 +617,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: 300,
+        height: Constants.MAX_HEIGHT / 2,
         position: 'absolute'
     },
     gameContainer: {
@@ -647,7 +643,7 @@ const styles = StyleSheet.create({
         paddingTop: 50,
         zIndex: 9999,
         width: Constants.MAX_WIDTH / 4,
-        height: 100,
+        height: Constants.MAX_WIDTH / 4,
         resizeMode: 'contain'
     },
     score: {
@@ -656,9 +652,9 @@ const styles = StyleSheet.create({
     },
     scoreText: {
         color: 'white',
-        fontSize: 20 * PixelRatio.getFontScale(),
-        paddingTop: 30,
-        paddingLeft: 10,
+        fontSize: normalize(30),
+        paddingTop: 100 / PixelRatio.get(),
+        paddingLeft: 40 / PixelRatio.get(),
         position: 'absolute', 
         fontFamily: 'SpaceCadetNF', 
     },
@@ -672,21 +668,21 @@ const styles = StyleSheet.create({
     },
     startGameButton: {
         zIndex: 9999,
-        fontSize: 50,
         height: Constants.MAX_HEIGHT,
         width: Constants.MAX_WIDTH,
     },
     pauseGameButton: {
         zIndex: 999999999,
-        height: 50,
-        width: 50,
         justifyContent: 'flex-end',
+        alignItems: 'flex-end',
         position: 'absolute',
         top: 0,
-        right: 0
+        right: 0,
+        height: 175 / PixelRatio.get(),
+        width: 175 / PixelRatio.get()
     },
     countdownTimer: {
-        top: 0
+        top: 0,
     }
 });
 
