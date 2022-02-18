@@ -562,7 +562,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 22,
         flexDirection: 'column',
-        height: 100
     },
     button: {
         borderRadius: 20,
@@ -615,8 +614,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: Constants.MAX_HEIGHT / 2,
-        position: 'absolute'
+        height: Constants.MAX_HEIGHT / 3,
+        position: 'absolute',
     },
     gameContainer: {
         position: 'absolute',

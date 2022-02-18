@@ -1,9 +1,16 @@
-import { Text, View, StyleSheet, ImageBackground, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, ImageBackground, Image, TouchableOpacity, Platform, PixelRatio } from "react-native";
 import { useFonts } from 'expo-font';
-import React from "react";
+import React, { useEffect } from "react";
 import Constants from "../Constants";
+import { normalize } from "./Helpers";
 
 export default function HomeScreen(props: any) {
+
+    useEffect(() => {
+            console.log(Platform.OS)
+            console.log(Constants.MAX_HEIGHT)
+    }, []);
+
     const startGame = () => {
         props.navigation.navigate('Game');
     }
@@ -51,7 +58,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        bottom: (-Constants.MAX_HEIGHT / 5) * 3
+        bottom: (-Constants.MAX_HEIGHT / 7) * 4
     },
     backgroundImage: {
         width: Constants.MAX_WIDTH,
@@ -60,11 +67,11 @@ const styles = StyleSheet.create({
     },
     buttonImage: {
         resizeMode: 'contain',
-        width: 250,
-        height: 100
+        width: Constants.MAX_WIDTH / 2,
+        height: 30 * PixelRatio.get(),
     },
     button: {
-        height: 100,
-        width: 250
+        height: 30 * PixelRatio.get(),
+        width: Constants.MAX_WIDTH / 2
     }
 });
