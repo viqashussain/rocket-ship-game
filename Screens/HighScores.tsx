@@ -77,7 +77,7 @@ export default function HighScoresScreen(props: any) {
                     <ImageBackground source={loadingBackground} resizeMode="cover" style={styles.backgroundImage}></ImageBackground>
                     :
 
-                    <ImageBackground source={background} style={styles.backgroundImage}>
+                    <ImageBackground resizeMode="stretch" source={background} style={styles.backgroundImage}>
 
                         <ImageBackground source={panel} style={styles.panelImage}>
                             <SafeAreaView style={styles.scoreListsContainer}>

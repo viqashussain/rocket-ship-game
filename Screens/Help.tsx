@@ -18,7 +18,7 @@ export default function HelpScreen(props: any) {
     return (
         <View style={styles.container}>
 
-            <ImageBackground source={background} resizeMode="cover" style={styles.backgroundImage}>
+            <ImageBackground source={background} resizeMode="stretch" style={styles.backgroundImage}>
                 <ImageBackground source={helpPanel} resizeMode="cover" style={styles.helpPanel}>
 
                     <View style={styles.helpPanelContainer}>
