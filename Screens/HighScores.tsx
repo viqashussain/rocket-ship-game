@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, ImageBackground, FlatList, SafeAreaView, Image } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, ImageBackground, FlatList, SafeAreaView, Image, PixelRatio } from "react-native";
 import Constants from "../Constants";
 import { getGlobalHighScores } from "../Firebase";
 import { getLocalHighScores } from "../Storage";
 import { GlobalHighScore, HighScore } from "../types/HighScore";
-import { numberWithCommas } from "./Helpers";
+import { normalize, numberWithCommas } from "./Helpers";
 
 export default function HighScoresScreen(props: any) {
     const goBack = () => {
@@ -41,7 +41,7 @@ export default function HighScoresScreen(props: any) {
 
             setLocalHighScores(localHighScores);
             setGlobalHighScores(globalHighScores);
-            // setIsLoading(false);
+            setIsLoading(false);
         }
 
         fetchAllLocalHighScores();
@@ -65,6 +65,7 @@ export default function HighScoresScreen(props: any) {
     }
 
     const background = require('../assets/img/highscore-background.png');
+    const highscoreText = require('../assets/img/highscore-text.png');
     const loadingBackground = require('../assets/img/loading_bg.png');
     const panel = require('../assets/img/highscore-panel.png');
     const backButton = require('../assets/img/back.png');
@@ -81,8 +82,9 @@ export default function HighScoresScreen(props: any) {
                     :
 
                     <ImageBackground resizeMode="stretch" source={background} style={styles.backgroundImage}>
+                        <Image resizeMode="contain" style={styles.highscoreText} source={highscoreText}></Image>
 
-                        <ImageBackground source={panel} style={styles.panelImage}>
+                        <ImageBackground resizeMode="stretch" source={panel} style={styles.panelImage}>
                             <SafeAreaView style={styles.scoreListsContainer}>
                                 <FlatList
                                     style={styles.localFlatList}
@@ -108,7 +110,7 @@ export default function HighScoresScreen(props: any) {
                         </ImageBackground>
                         <View style={styles.goBackButtonContainer}>
                             <TouchableOpacity style={styles.goBackButton} onPress={goBack}>
-                                <Image style={styles.goBackButtonImage} source={backButton}></Image>
+                                <Image resizeMode="contain" style={styles.goBackButtonImage} source={backButton}></Image>
                             </TouchableOpacity>
                         </View>
                     </ImageBackground>
@@ -125,19 +127,25 @@ const styles = StyleSheet.create({
     },
     scoreListsContainer: {
         flexDirection: 'row',
-        flex: 5,
-        marginTop: 100,
-        marginBottom: 15
+        marginTop: Constants.MAX_HEIGHT / 12,
+        justifyContent: 'flex-start',
+        marginLeft: 90 / PixelRatio.get(),
+        marginBottom: 60 / PixelRatio.get(),
     },
     localFlatList: {
-        marginLeft: 25
+        flexBasis: '50%',
+        flex: 1,
+        left: 0
     },
     globalFlatList: {
-        marginBottom: 25,
-        marginLeft: 25
+        flexBasis: '90%',
+        left: 0,
+        paddingLeft: 30 / PixelRatio.get()
     },
     globallyRankedPersonalHighScore: {
-        marginLeft: 25
+        paddingLeft: 30 / PixelRatio.get(),
+        flexBasis: '10%',
+        paddingTop: 20
     },
     backgroundImage: {
         width: Constants.MAX_WIDTH,
@@ -146,15 +154,12 @@ const styles = StyleSheet.create({
     },
     panelImage: {
         width: Constants.MAX_WIDTH,
-        height: 600,
+        height: Constants.MAX_HEIGHT / 1.5,
         resizeMode: 'contain',
         position: 'absolute'
     },
     container: {
         flex: 1,
-    },
-    testText: {
-        fontSize: 50
     },
     goBackButtonContainer: {
         alignItems: 'center',
@@ -167,23 +172,31 @@ const styles = StyleSheet.create({
     },
     goBackButtonImage: {
         resizeMode: 'contain',
-        width: 250,
+        width: Constants.MAX_WIDTH / 2,
         height: 100,
         flex: 1,
     },
     textStyle: {
         fontFamily: 'SpaceCadetNF',
-        paddingBottom: 5
+        paddingBottom: 5,
+        fontSize: normalize(15)
     },
     globalFlatListContainer: {
         justifyContent: 'center',
         flexDirection: 'column',
-        flex: 2,
+        flexBasis: '50%'
     },
     loadingText: {
         position: 'absolute',
         bottom: 0,
         width: Constants.MAX_WIDTH - 100,
         margin: 50
-      },
+    },
+    highscoreText: {
+        position: 'absolute',
+        top: 0,
+        marginTop: -40,
+        width: Constants.MAX_WIDTH - 100,
+        margin: 50
+    },
 });
