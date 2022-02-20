@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 20,
+        bottom: -20,
         width: Constants.MAX_WIDTH
     },
     goBackButton: {
@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
     textStyle: {
         textAlign: "center",
         fontFamily: 'SpaceCadetNF',
-        fontSize: normalize(15),
+        fontSize: PixelRatio.getFontScale() * 14,
     },
     helpTextStyle: {
         textAlign: "center",
         fontFamily: 'SpaceCadetNF',
-        fontSize: normalize(15),
+        fontSize: PixelRatio.getFontScale() * 14,
         paddingLeft: 40 / PixelRatio.get(),
     },
     rocketImage: {

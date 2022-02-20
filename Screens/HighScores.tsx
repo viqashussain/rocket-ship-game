@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, ImageBackground, FlatList, SafeAreaView, Image, PixelRatio } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, ImageBackground, FlatList, SafeAreaView, Image, PixelRatio, Platform } from "react-native";
 import Constants from "../Constants";
 import { getGlobalHighScores } from "../Firebase";
 import { getLocalHighScores } from "../Storage";
@@ -18,6 +18,9 @@ export default function HighScoresScreen(props: any) {
 
     // fetch high scores from local upon load
     useEffect(() => {
+        console.log(Platform.OS)
+            console.log(Constants.MAX_HEIGHT)
+            console.log(PixelRatio.get())
         async function fetchAllLocalHighScores() {
             const localHighScores = await getLocalHighScores();
 
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: Constants.MAX_HEIGHT / 12,
         justifyContent: 'flex-start',
-        marginLeft: 90 / PixelRatio.get(),
+        marginLeft: 10 * PixelRatio.get(),
         marginBottom: 60 / PixelRatio.get(),
     },
     localFlatList: {
@@ -143,7 +146,6 @@ const styles = StyleSheet.create({
     globalFlatList: {
         flexBasis: '90%',
         left: 0,
-        paddingLeft: 30 / PixelRatio.get()
     },
     globallyRankedPersonalHighScore: {
         paddingLeft: 30 / PixelRatio.get(),
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
     textStyle: {
         fontFamily: 'SpaceCadetNF',
         paddingBottom: 5,
-        fontSize: normalize(15)
+        fontSize: PixelRatio.get() * 5
     },
     globalFlatListContainer: {
         justifyContent: 'center',
@@ -198,7 +200,7 @@ const styles = StyleSheet.create({
     highscoreText: {
         position: 'absolute',
         top: 0,
-        marginTop: -40,
+        marginTop: -120 / PixelRatio.get() ,
         width: Constants.MAX_WIDTH - 100,
         margin: 50
     },
