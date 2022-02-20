@@ -1,4 +1,5 @@
-import { Text, TouchableOpacity, View, StyleSheet, ImageBackground, Image, PixelRatio } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, ImageBackground, Image, PixelRatio, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Constants from "../Constants";
 import { normalize } from "./Helpers";
 
@@ -24,6 +25,8 @@ export default function HelpScreen(props: any) {
             <Image resizeMode="contain" style={styles.helpText} source={helpText}></Image>
                 <ImageBackground source={helpPanel} resizeMode="stretch" style={styles.helpPanel}>
 
+                    <ScrollView>
+
                     <View style={styles.helpPanelContainer}>
                         <Text style={styles.textStyle}>You are the rocket in the Rocket Ship Explorer flying through space collecting valuable minerals. As you fly, you'll need to avoid the asteroids. Hit too many asteroids and your rocket will be too damaged to fly. You can collect fuel floating about in space to regain your health.</Text>
                         <Text style={styles.textStyle}>Simply tap on the screen to make your rocket fly. Tapping further to the left or right will propel you in that direction.</Text>
@@ -47,7 +50,7 @@ export default function HelpScreen(props: any) {
                             <Text style={styles.helpTextStyle}>Obtain the jewels by flying into them to increase your score. The further you progress, the more points the jewels will be worth.</Text>
                         </View>
                     </View>
-
+                    </ScrollView>
                 </ImageBackground>
                 <View style={styles.goBackButtonContainer}>
                     <TouchableOpacity style={styles.goBackButton} onPress={goBack}>
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: -20,
+        bottom: 20,
         width: Constants.MAX_WIDTH
     },
     goBackButton: {
@@ -86,7 +89,10 @@ const styles = StyleSheet.create({
     },
     helpPanel: {
         width: Constants.MAX_WIDTH,
-        height: 580,
+        height: Constants.MAX_HEIGHT / 1.5,
+        resizeMode: 'contain',
+        position: 'absolute',
+        paddingBottom: 20
     },
     helpPanelContainer: {
         padding: 20
@@ -100,26 +106,26 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: 'SpaceCadetNF',
         fontSize: PixelRatio.getFontScale() * 14,
-        paddingLeft: 40 / PixelRatio.get(),
+        paddingLeft: 20 / PixelRatio.get(),
     },
     rocketImage: {
-        height: 100,
-        width: 60,
+        height: 30 * PixelRatio.get(),
+        width: 20 * PixelRatio.get(),
         resizeMode: 'contain'
     },
     asteroidImage: {
-        height: 60,
-        width: 60,
+        height: 20 * PixelRatio.get(),
+        width: 20 * PixelRatio.get(),
         resizeMode: 'contain'
     },
     fuelImage: {
-        height: 60,
-        width: 60,
+        height: 20 * PixelRatio.get(),
+        width: 20 * PixelRatio.get(),
         resizeMode: 'contain'
     },
     jewelImage: {
-        height: 60,
-        width: 60,
+        height: 20 * PixelRatio.get(),
+        width: 20 * PixelRatio.get(),
         resizeMode: 'contain'
     },
     imagesItemsContainer: {
@@ -135,7 +141,7 @@ const styles = StyleSheet.create({
     helpText: {
         position: 'absolute',
         top: 0,
-        marginTop: -40,
+        marginTop: -120 / PixelRatio.get() ,
         width: Constants.MAX_WIDTH - 100,
         margin: 50
     },

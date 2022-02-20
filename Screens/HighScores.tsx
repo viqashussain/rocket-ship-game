@@ -126,11 +126,6 @@ export default function HighScoresScreen(props: any) {
 }
 
 const styles = StyleSheet.create({
-    backButton: {
-        height: 500,
-        width: '100%',
-        backgroundColor: 'green'
-    },
     scoreListsContainer: {
         flexDirection: 'row',
         marginTop: Constants.MAX_HEIGHT / 12,
@@ -148,7 +143,7 @@ const styles = StyleSheet.create({
         left: 0,
     },
     globallyRankedPersonalHighScore: {
-        paddingLeft: 30 / PixelRatio.get(),
+        paddingLeft: 10 / PixelRatio.get(),
         flexBasis: '10%',
         paddingTop: 20
     },
