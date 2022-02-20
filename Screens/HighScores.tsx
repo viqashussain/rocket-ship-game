@@ -36,8 +36,11 @@ export default function HighScoresScreen(props: any) {
             });
 
             const currentBest = localHighScores[0];
-            const globallyRankedPersonalHighScore = globalHighScores.find(x => x.id === currentBest.id);
-            setGloballyRankedPersonalHighScore(globallyRankedPersonalHighScore);
+            if (currentBest)
+            {
+                const globallyRankedPersonalHighScore = globalHighScores.find(x => x.id === currentBest.id);
+                setGloballyRankedPersonalHighScore(globallyRankedPersonalHighScore);
+            }
 
             setLocalHighScores(localHighScores);
             setGlobalHighScores(globalHighScores);
