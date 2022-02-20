@@ -192,6 +192,8 @@ export default function Game(props: any) {
         Matter.Body.scale(rocket, rocketScale, rocketScale);
         Matter.Body.rotate(rocket, Math.PI)
 
+        Matter.Body.setMass(rocket, 5);
+
         const rocketWidth = rocket.bounds.max.x - rocket.bounds.min.x;
         const rocketHeight = rocket.bounds.max.y - rocket.bounds.min.y;
 
@@ -593,7 +595,7 @@ const styles = StyleSheet.create({
         top: Constants.MAX_HEIGHT / 2, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'
     },
     modalText: {
-        fontSize: normalize(25),
+        fontSize: 10 * PixelRatio.get(),
         paddingTop: 130 / PixelRatio.get(),
         marginBottom: 20,
         textAlign: "center",
@@ -610,11 +612,10 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     pausePanelImage: {
-        width: Constants.MAX_WIDTH / 2,
+        width: Constants.MAX_WIDTH / 1,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: Constants.MAX_HEIGHT / 3,
         position: 'absolute',
     },
     gameContainer: {
