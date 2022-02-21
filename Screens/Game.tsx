@@ -774,7 +774,7 @@ const styles = StyleSheet.create({
     },
     firstGameText: {
         color: '#c3c4c6',
-        fontSize: normalize(20),
+        fontSize: normalize(15),
         fontFamily: 'SpaceCadetNF',
         paddingTop: 10,
         padding: 10,
