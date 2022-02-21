@@ -64,7 +64,6 @@ export default function HighScoresScreen(props: any) {
         return (
             <View>
                 <Text style={[styles.textStyle]}>{highScore.item.rank}. {numberWithCommas(highScore.item.score)}</Text>
-                <Text style={[styles.textStyle]}>{highScore.item.user}</Text>
             </View>
         )
     }
