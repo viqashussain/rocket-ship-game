@@ -18,9 +18,6 @@ export default function HighScoresScreen(props: any) {
 
     // fetch high scores from local upon load
     useEffect(() => {
-        console.log(Platform.OS)
-        console.log(Constants.MAX_HEIGHT)
-        console.log(PixelRatio.get())
         async function fetchAllLocalHighScores() {
             const localHighScores = await getLocalHighScores();
 

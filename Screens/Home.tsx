@@ -5,12 +5,6 @@ import Constants from "../Constants";
 import { normalize } from "./Helpers";
 
 export default function HomeScreen(props: any) {
-
-    useEffect(() => {
-        console.log(Platform.OS)
-        console.log(Constants.MAX_HEIGHT)
-    }, []);
-
     const startGame = () => {
         props.navigation.navigate('Game');
     }
