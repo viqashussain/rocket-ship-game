@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     },
     globallyRankedPersonalHighScore: {
         flexBasis: '10%',
-        paddingTop: 20
+        paddingTop: 20 / PixelRatio.get()
     },
     backgroundImage: {
         width: Constants.MAX_WIDTH,
