@@ -75,10 +75,12 @@ const styles = StyleSheet.create({
     buttonImage: {
         resizeMode: 'contain',
         width: Constants.MAX_WIDTH / 2,
-        height: normalize(100),
+        flex: 1
     },
     button: {
         resizeMode: 'contain',
         width: Constants.MAX_WIDTH / 2,
+        flexBasis: '33%',
+        flex: 1
     }
 });
