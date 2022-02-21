@@ -7,8 +7,8 @@ import { normalize } from "./Helpers";
 export default function HomeScreen(props: any) {
 
     useEffect(() => {
-            console.log(Platform.OS)
-            console.log(Constants.MAX_HEIGHT)
+        console.log(Platform.OS)
+        console.log(Constants.MAX_HEIGHT)
     }, []);
 
     const startGame = () => {
@@ -35,6 +35,8 @@ export default function HomeScreen(props: any) {
     return (
         <ImageBackground source={imageBackground} resizeMode="stretch" style={styles.backgroundImage}>
 
+            <View style={styles.emptyContainer}></View>
+
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.button} onPress={startGame}>
                     <Image resizeMode="contain" style={styles.buttonImage} source={playButton}></Image>
@@ -58,7 +60,12 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        bottom: -Constants.MAX_HEIGHT / 2.5
+        flexBasis: '35%',
+        justifyContent: 'space-around'
+    },
+    emptyContainer:
+    {
+        flexBasis: '65%'
     },
     backgroundImage: {
         width: Constants.MAX_WIDTH,
@@ -68,10 +75,10 @@ const styles = StyleSheet.create({
     buttonImage: {
         resizeMode: 'contain',
         width: Constants.MAX_WIDTH / 2,
+        height: normalize(100),
     },
     button: {
         resizeMode: 'contain',
         width: Constants.MAX_WIDTH / 2,
-        height: normalize(100)
     }
 });
