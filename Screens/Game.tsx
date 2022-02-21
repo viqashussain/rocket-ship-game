@@ -670,6 +670,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     backgroundImage: {
+        zIndex: 1,
         width: Constants.MAX_WIDTH,
         flex: 1,
         justifyContent: "center"
@@ -788,7 +789,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     touchableOpacityFirstGame: {
-        zIndex: 99999999999999999999999999999999,
+        zIndex: 99999,
         height: Constants.MAX_HEIGHT,
         width: Constants.MAX_WIDTH,
         position: 'absolute'
