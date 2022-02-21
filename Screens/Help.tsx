@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
     textStyle: {
         textAlign: "center",
         fontFamily: 'SpaceCadetNF',
-        fontSize: PixelRatio.getFontScale() * 14,
+        fontSize: normalize(14),
     },
     helpTextStyle: {
         textAlign: "center",
         fontFamily: 'SpaceCadetNF',
-        fontSize: PixelRatio.getFontScale() * 14,
+        fontSize: normalize(14),
         paddingLeft: 20 / PixelRatio.get(),
     },
     rocketImage: {
