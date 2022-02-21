@@ -447,7 +447,7 @@ export default function Game(props: any) {
 
     return (
         <View style={styles.container}>
-            <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}>
+            <ImageBackground source={imageBackground} resizeMode="stretch" style={styles.backgroundImage}>
 
                 {
                     showCountdownTimer &&
@@ -595,7 +595,7 @@ const styles = StyleSheet.create({
         top: Constants.MAX_HEIGHT / 2, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'
     },
     modalText: {
-        fontSize: 10 * PixelRatio.get(),
+        fontSize: normalize(20),
         paddingTop: 130 / PixelRatio.get(),
         marginBottom: 20,
         textAlign: "center",
@@ -612,11 +612,10 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     pausePanelImage: {
-        width: Constants.MAX_WIDTH / 1,
+        width: Constants.MAX_WIDTH / 1.5,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute',
     },
     gameContainer: {
         position: 'absolute',

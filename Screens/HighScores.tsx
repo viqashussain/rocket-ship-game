@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     textStyle: {
         fontFamily: 'SpaceCadetNF',
         paddingBottom: 5,
-        fontSize: PixelRatio.get() * 5
+        fontSize: normalize(15)
     },
     globalFlatListContainer: {
         justifyContent: 'center',
