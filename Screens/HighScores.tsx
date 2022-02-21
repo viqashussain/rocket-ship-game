@@ -19,8 +19,8 @@ export default function HighScoresScreen(props: any) {
     // fetch high scores from local upon load
     useEffect(() => {
         console.log(Platform.OS)
-            console.log(Constants.MAX_HEIGHT)
-            console.log(PixelRatio.get())
+        console.log(Constants.MAX_HEIGHT)
+        console.log(PixelRatio.get())
         async function fetchAllLocalHighScores() {
             const localHighScores = await getLocalHighScores();
 
@@ -39,8 +39,7 @@ export default function HighScoresScreen(props: any) {
             });
 
             const currentBest = localHighScores[0];
-            if (currentBest)
-            {
+            if (currentBest) {
                 const globallyRankedPersonalHighScore = globalHighScores.find(x => x.id === currentBest.id);
                 setGloballyRankedPersonalHighScore(globallyRankedPersonalHighScore);
             }
@@ -143,7 +142,6 @@ const styles = StyleSheet.create({
         left: 0,
     },
     globallyRankedPersonalHighScore: {
-        paddingLeft: 10 / PixelRatio.get(),
         flexBasis: '10%',
         paddingTop: 20
     },
@@ -154,27 +152,29 @@ const styles = StyleSheet.create({
     },
     panelImage: {
         width: Constants.MAX_WIDTH,
-        height: Constants.MAX_HEIGHT / 1.5,
-        resizeMode: 'contain',
-        position: 'absolute'
+        flexBasis: '70%',
+        flex: 1,
+        resizeMode: 'contain'
     },
     container: {
         flex: 1,
+        flexDirection: 'row'
     },
     goBackButtonContainer: {
+        justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute',
         bottom: 20,
-        width: Constants.MAX_WIDTH
+        width: Constants.MAX_WIDTH,
+        flexBasis: '10%',
     },
     goBackButton: {
-        flex: 1,
+        alignItems: 'center',
+        flex: 1
     },
     goBackButtonImage: {
         resizeMode: 'contain',
         width: Constants.MAX_WIDTH / 2,
         height: 100,
-        flex: 1,
     },
     textStyle: {
         fontFamily: 'SpaceCadetNF',
@@ -193,10 +193,9 @@ const styles = StyleSheet.create({
         margin: 50
     },
     highscoreText: {
-        position: 'absolute',
-        top: 0,
-        marginTop: -120 / PixelRatio.get() ,
+        flexBasis: '20%',
         width: Constants.MAX_WIDTH - 100,
-        margin: 50
+        marginLeft: 'auto',
+        marginRight: 'auto'
     },
 });

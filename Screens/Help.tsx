@@ -22,34 +22,34 @@ export default function HelpScreen(props: any) {
         <View style={styles.container}>
 
             <ImageBackground source={background} resizeMode="stretch" style={styles.backgroundImage}>
-            <Image resizeMode="contain" style={styles.helpText} source={helpText}></Image>
+                <Image resizeMode="contain" style={styles.helpText} source={helpText}></Image>
                 <ImageBackground source={helpPanel} resizeMode="stretch" style={styles.helpPanel}>
 
                     <ScrollView>
 
-                    <View style={styles.helpPanelContainer}>
-                        <Text style={styles.textStyle}>You are the rocket in the Rocket Ship Explorer flying through space collecting valuable minerals. As you fly, you'll need to avoid the asteroids. Hit too many asteroids and your rocket will be too damaged to fly. You can collect fuel floating about in space to regain your health.</Text>
-                        <Text style={styles.textStyle}>Simply tap on the screen to make your rocket fly. Tapping further to the left or right will propel you in that direction.</Text>
-                    </View>
+                        <View style={styles.helpPanelContainer}>
+                            <Text style={styles.textStyle}>You are the rocket in the Rocket Ship Explorer flying through space collecting valuable minerals. As you fly, you'll need to avoid the asteroids. Hit too many asteroids and your rocket will be too damaged to fly. You can collect fuel floating about in space to regain your health.</Text>
+                            <Text style={styles.textStyle}>Simply tap on the screen to make your rocket fly. Tapping further to the left or right will propel you in that direction.</Text>
+                        </View>
 
-                    <View style={styles.imagesItemsContainer}>
-                        <View style={styles.helpItemContainer}>
-                            <Image style={styles.rocketImage} source={rocket}></Image>
-                            <Text style={styles.helpTextStyle}>This rocket is you. Tap to make the rocket fly.</Text>
+                        <View style={styles.imagesItemsContainer}>
+                            <View style={styles.helpItemContainer}>
+                                <Image style={styles.rocketImage} source={rocket}></Image>
+                                <Text style={styles.helpTextStyle}>This rocket is you. Tap to make the rocket fly.</Text>
+                            </View>
+                            <View style={styles.helpItemContainer}>
+                                <Image style={styles.asteroidImage} source={asteroid}></Image>
+                                <Text style={styles.helpTextStyle}>Avoid the asteroids. As you progress, the asteroids will be become larger.</Text>
+                            </View>
+                            <View style={styles.helpItemContainer}>
+                                <Image style={styles.fuelImage} source={fuel}></Image>
+                                <Text style={styles.helpTextStyle}>Obtain the fuel by flying into it to regain your health.</Text>
+                            </View>
+                            <View style={styles.helpItemContainer}>
+                                <Image style={styles.jewelImage} source={jewel}></Image>
+                                <Text style={styles.helpTextStyle}>Obtain the jewels by flying into them to increase your score. The further you progress, the more points the jewels will be worth.</Text>
+                            </View>
                         </View>
-                        <View style={styles.helpItemContainer}>
-                            <Image style={styles.asteroidImage} source={asteroid}></Image>
-                            <Text style={styles.helpTextStyle}>Avoid the asteroids. As you progress, the asteroids will be become larger.</Text>
-                        </View>
-                        <View style={styles.helpItemContainer}>
-                            <Image style={styles.fuelImage} source={fuel}></Image>
-                            <Text style={styles.helpTextStyle}>Obtain the fuel by flying into it to regain your health.</Text>
-                        </View>
-                        <View style={styles.helpItemContainer}>
-                            <Image style={styles.jewelImage} source={jewel}></Image>
-                            <Text style={styles.helpTextStyle}>Obtain the jewels by flying into them to increase your score. The further you progress, the more points the jewels will be worth.</Text>
-                        </View>
-                    </View>
                     </ScrollView>
                 </ImageBackground>
                 <View style={styles.goBackButtonContainer}>
@@ -65,17 +65,18 @@ export default function HelpScreen(props: any) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'row'
     },
     goBackButtonContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute',
         bottom: 20,
-        width: Constants.MAX_WIDTH
+        width: Constants.MAX_WIDTH,
+        flexBasis: '10%',
     },
     goBackButton: {
         alignItems: 'center',
-        flex: 1,
+        flex: 1
     },
     goBackButtonImage: {
         resizeMode: 'contain',
@@ -89,10 +90,10 @@ const styles = StyleSheet.create({
     },
     helpPanel: {
         width: Constants.MAX_WIDTH,
-        height: Constants.MAX_HEIGHT / 1.5,
         resizeMode: 'contain',
-        position: 'absolute',
-        paddingBottom: 20
+        paddingBottom: 20,
+        flexBasis: '70%',
+        flex: 1
     },
     helpPanelContainer: {
         padding: 20
@@ -139,10 +140,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     helpText: {
-        position: 'absolute',
-        top: 0,
-        marginTop: -120 / PixelRatio.get() ,
+        flexBasis: '20%',
         width: Constants.MAX_WIDTH - 100,
-        margin: 50
+        marginLeft: 'auto',
+        marginRight: 'auto'
     },
 });
