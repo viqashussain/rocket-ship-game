@@ -33,19 +33,19 @@ export default function HomeScreen(props: any) {
     const helpButton = require('../assets/img/help.png');
 
     return (
-        <ImageBackground source={imageBackground} resizeMode="cover" style={styles.backgroundImage}>
+        <ImageBackground source={imageBackground} resizeMode="stretch" style={styles.backgroundImage}>
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.button} onPress={startGame}>
-                    <Image style={styles.buttonImage} source={playButton}></Image>
+                    <Image resizeMode="contain" style={styles.buttonImage} source={playButton}></Image>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={goToHighScores}>
-                    <Image style={styles.buttonImage} source={highscoreButton}></Image>
+                    <Image resizeMode="contain" style={styles.buttonImage} source={highscoreButton}></Image>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={goToHelp}>
-                    <Image style={styles.buttonImage} source={helpButton}></Image>
+                    <Image resizeMode="contain" style={styles.buttonImage} source={helpButton}></Image>
                 </TouchableOpacity>
             </View>
 
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        bottom: (-Constants.MAX_HEIGHT / 7) * 4
+        bottom: -Constants.MAX_HEIGHT / 2.5
     },
     backgroundImage: {
         width: Constants.MAX_WIDTH,
@@ -68,10 +68,10 @@ const styles = StyleSheet.create({
     buttonImage: {
         resizeMode: 'contain',
         width: Constants.MAX_WIDTH / 2,
-        height: 30 * PixelRatio.get(),
     },
     button: {
-        height: 30 * PixelRatio.get(),
-        width: Constants.MAX_WIDTH / 2
+        resizeMode: 'contain',
+        width: Constants.MAX_WIDTH / 2,
+        height: normalize(100)
     }
 });
