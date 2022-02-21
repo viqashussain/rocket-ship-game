@@ -3,6 +3,7 @@ import { HighScore } from "./types/HighScore";
 
 const localHighScoresKey = 'localHighScoresKey';
 const userNameKey = 'userNameKey';
+const firstGameKey = 'firstGameKey';
 
 export const saveHighScoreLocally = async (newHighScore: HighScore) => {
     const localHighScores = await AsyncStorage.getItem(localHighScoresKey);
@@ -43,6 +44,16 @@ export const getUserName = async (): Promise<string> => {
 
 export const storeUserName = async (userName: string): Promise<void> => {
     await AsyncStorage.setItem(userNameKey, userName);
+}
+
+export const getIsFirstGame = async (): Promise<boolean> => {
+    const firstGame = await AsyncStorage.getItem(firstGameKey);
+
+    return firstGame == null;
+} 
+
+export const setIsFirstGameInFb = async (): Promise<void> => {
+    await AsyncStorage.setItem(firstGameKey, 'true');
 }
 
 // export const clear = async (): Promise<void> => {

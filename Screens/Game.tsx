@@ -11,7 +11,7 @@ import { DECREASE_HEALTH, INCREASE_HEALTH, INCREMENT_LEVEL, RESET_GAME, UPDATE_S
 import Asteroid from "../matter-objects/Asteroid"
 import Fuel from "../matter-objects/Fuel"
 import * as Haptics from 'expo-haptics';
-import { saveHighScoreLocally } from "../Storage";
+import { getIsFirstGame, saveHighScoreLocally, setIsFirstGameInFb } from "../Storage";
 import { HighScore } from "../types/HighScore";
 import { saveGlobalHighScore } from "../Firebase"
 import BronzeCoin from "../matter-objects/BronzeCoin"
@@ -44,6 +44,8 @@ export default function Game(props: any) {
     const [showContinueButtonOnModal, setShowContinueButtonOnModal] = useState<boolean>(false);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [countdownValue, setCountdownValue] = useState<number | null>(3);
+    const [isFirstGame, setIsFirstGame] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [showCountdownTimer, setShowCountdownTimer] = useState<boolean>(false);
     const [allThreeCoinsHaveBeenIntroduced, setAllThreeCoinsHaveBeenIntroduced] = useState<boolean>(false);
     const [healthImageToUse, setHealthImageToUse] = useState<any>(health100Image);
@@ -60,6 +62,15 @@ export default function Game(props: any) {
 
     // setup world on load
     useEffect(() => {
+
+        async function asyncGetIsFirstGame() {
+            const isFirstGameValueFromFB = await getIsFirstGame();
+            setIsFirstGame(isFirstGameValueFromFB);
+            setIsLoading(false);
+        }
+
+        asyncGetIsFirstGame();
+
         dispatch({ type: RESET_GAME });
         setEntities(setupWorld());
     }, []);
@@ -118,6 +129,11 @@ export default function Game(props: any) {
         setModalVisible(true);
         setCountdownValue(3);
         setRunning(false);
+    }
+
+    const dismissFirstGameScreen = () => {
+        setIsFirstGameInFb();
+        setIsFirstGame(false);
     }
 
     const setupWorld = (): any => {
@@ -443,98 +459,146 @@ export default function Game(props: any) {
     const resumeButton = require('../assets/img/resume.png');
     const scoreboard = require('../assets/img/scoreboard.png');
     const pauseButton = require('../assets/img/pause.png');
+    const loadingBackground = require('../assets/img/loading_bg.png');
+    const loadingText = require('../assets/img/loading_text.png');
 
     return (
         <View style={styles.container}>
-            <ImageBackground source={imageBackground} resizeMode="stretch" style={styles.backgroundImage}>
 
-                {
-                    showCountdownTimer &&
-                    <LottieView style={styles.countdownTimer} source={require('../assets/CountDown.json')} autoPlay />
-                }
-
-                {
-                    (!showCountdownTimer && !running) &&
-                    <Text style={styles.tapToPlayText}>Tap to Play!</Text>
-                }
-
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        setModalVisible(!modalVisible);
-                    }}
-
-                >
-                    <View style={styles.centeredView}>
-                        <ImageBackground resizeMode="contain" source={showContinueButtonOnModal ? pausePanel : gameoverPanel} style={styles.pausePanelImage}>
-
-                            <Text style={styles.modalText}>Score: {numberWithCommas(score)}</Text>
-
-                            {
-                                showContinueButtonOnModal &&
-                                <TouchableOpacity style={styles.modalButton} onPress={() => continueGame()}>
-                                    <Image source={resumeButton} style={styles.modalButtonImage}></Image>
-                                </TouchableOpacity>
-                            }
-
-                            <TouchableOpacity style={styles.modalButton} onPress={() => restartGame()}>
-                                <Image source={restartButton} style={styles.modalButtonImage}></Image>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.modalButton} onPress={() => goToHome()}>
-                                <Image source={quitButton} style={styles.modalButtonImage}></Image>
-                            </TouchableOpacity>
-
-
-                        </ImageBackground>
-                    </View>
-                </Modal>
-                {
-                    <TouchableOpacity
-                        onPress={() => pauseGame()}
-                        style={styles.pauseGameButton}
-                    >
-                        <Image resizeMode="contain" style={styles.pauseGameButton} source={pauseButton}></Image>
-                    </TouchableOpacity>
-                }
-                <View style={styles.scoreHealthContainer}>
-                    <Image style={styles.health} resizeMode="stretch" source={healthImageToUse}></Image>
-                    <View style={styles.emptySpace}></View>
-                    <ImageBackground resizeMode="stretch" style={styles.score} source={scoreboard}>
-                        <Text style={styles.scoreText}>{numberWithCommas(score)}</Text>
+            {
+                isLoading ?
+                    <ImageBackground source={loadingBackground} resizeMode="cover" style={styles.backgroundImage}>
+                        <Image resizeMode="contain" style={styles.loadingText} source={loadingText}></Image>
                     </ImageBackground>
-                </View>
-                {
-                    !running &&
-                    <TouchableOpacity
-                        onPress={() => startGame()}
-                        style={styles.startGameButton}
-                    ></TouchableOpacity>
-                }
+                    :
+                    <ImageBackground source={imageBackground} resizeMode="stretch" style={styles.backgroundImage}>
 
-                {
-                    entities != null ?
-                        <GameEngine
-                            ref={(ref) => {
-                                if (ref) {
-                                    setGameEngine(ref)
-                                }
+                        {
+                            isFirstGame &&
+                            <TouchableOpacity style={styles.touchableOpacityFirstGame} onPress={() => dismissFirstGameScreen()}>
+                                <View style={styles.firstGameContainer}>
+                                    <View style={styles.firstGameLeftContainer}>
+                                    </View>
+                                    <View style={styles.firstGameTextContainer}>
+                                        <Text style={styles.firstGameText}>
+                                            How to play:
+                                        </Text>
+
+                                        <Text style={styles.firstGameText}>
+                                            Tap to make the rocket fly, and keep tapping so it doesn't get sucked down into the black hole.
+                                        </Text>
+
+                                        <Text style={styles.firstGameText}>
+                                            Avoid the asteroids, collect the emeralds to increase your points tally and collect the fuel to regain your health.
+                                        </Text>
+
+                                        <Text style={styles.firstGameText}>
+                                            If you fall off the bottom, or your health reaches 0, game over!
+                                        </Text>
+
+                                        <Text style={styles.firstGameText}>
+                                            Tap more towards the right to fly further right and tap further towards the left to fly further left.
+                                        </Text>
+
+                                        <Text style={styles.firstGameText}>
+                                            Tap to dismiss.
+                                        </Text>
+                                    </View>
+
+                                    <View style={styles.firstGameRightContainer}>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        }
+
+                        {
+                            showCountdownTimer &&
+                            <LottieView style={styles.countdownTimer} source={require('../assets/CountDown.json')} autoPlay />
+                        }
+
+                        {
+                            (!showCountdownTimer && !running && !isFirstGame) &&
+                            <Text style={styles.tapToPlayText}>Tap to Play!</Text>
+                        }
+
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                                Alert.alert("Modal has been closed.");
+                                setModalVisible(!modalVisible);
                             }}
-                            style={styles.gameContainer}
-                            running={running}
-                            onEvent={async (e: any) => onEvent(e)}
-                            systems={[Physics, ScoreCounter]}
-                            entities={entities}>
-                            <StatusBar hidden={true} />
-                        </GameEngine>
-                        : <Text>Loading...</Text>
-                }
+
+                        >
+                            <View style={styles.centeredView}>
+                                <ImageBackground resizeMode="contain" source={showContinueButtonOnModal ? pausePanel : gameoverPanel} style={styles.pausePanelImage}>
+
+                                    <Text style={styles.modalText}>Score: {numberWithCommas(score)}</Text>
+
+                                    {
+                                        showContinueButtonOnModal &&
+                                        <TouchableOpacity style={styles.modalButton} onPress={() => continueGame()}>
+                                            <Image source={resumeButton} style={styles.modalButtonImage}></Image>
+                                        </TouchableOpacity>
+                                    }
+
+                                    <TouchableOpacity style={styles.modalButton} onPress={() => restartGame()}>
+                                        <Image source={restartButton} style={styles.modalButtonImage}></Image>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity style={styles.modalButton} onPress={() => goToHome()}>
+                                        <Image source={quitButton} style={styles.modalButtonImage}></Image>
+                                    </TouchableOpacity>
 
 
-            </ImageBackground>
+                                </ImageBackground>
+                            </View>
+                        </Modal>
+                        {
+                            <TouchableOpacity
+                                onPress={() => pauseGame()}
+                                style={styles.pauseGameButton}
+                            >
+                                <Image resizeMode="contain" style={styles.pauseGameButton} source={pauseButton}></Image>
+                            </TouchableOpacity>
+                        }
+                        <View style={styles.scoreHealthContainer}>
+                            <Image style={styles.health} resizeMode="stretch" source={healthImageToUse}></Image>
+                            <View style={styles.emptySpace}></View>
+                            <ImageBackground resizeMode="stretch" style={styles.score} source={scoreboard}>
+                                <Text style={styles.scoreText}>{numberWithCommas(score)}</Text>
+                            </ImageBackground>
+                        </View>
+                        {
+                            !running &&
+                            <TouchableOpacity
+                                onPress={() => startGame()}
+                                style={styles.startGameButton}
+                            ></TouchableOpacity>
+                        }
+
+                        {
+                            (entities != null && !isFirstGame) ?
+                                <GameEngine
+                                    ref={(ref) => {
+                                        if (ref) {
+                                            setGameEngine(ref)
+                                        }
+                                    }}
+                                    style={styles.gameContainer}
+                                    running={running}
+                                    onEvent={async (e: any) => onEvent(e)}
+                                    systems={[Physics, ScoreCounter]}
+                                    entities={entities}>
+                                    <StatusBar hidden={true} />
+                                </GameEngine>
+                                : <Text>Loading...</Text>
+                        }
+
+
+                    </ImageBackground>
+            }
         </View >
     )
 }
@@ -651,8 +715,8 @@ const styles = StyleSheet.create({
         fontSize: normalize(30),
         paddingTop: 100 / PixelRatio.get(),
         paddingLeft: 40 / PixelRatio.get(),
-        position: 'absolute', 
-        fontFamily: 'SpaceCadetNF', 
+        position: 'absolute',
+        fontFamily: 'SpaceCadetNF',
     },
     scoreHealthContainer: {
         flexWrap: 'wrap',
@@ -679,6 +743,55 @@ const styles = StyleSheet.create({
     },
     countdownTimer: {
         top: 0,
+    },
+    loadingText: {
+        position: 'absolute',
+        bottom: 0,
+        width: Constants.MAX_WIDTH - 100,
+        margin: 50
+    },
+    firstGameContainer: {
+        flexDirection: 'row',
+        flex: 1,
+    },
+    firstGameLeftContainer: {
+        flexBasis: '40%',
+        flex: 1,
+        backgroundColor: '#c3c4c6',
+        height: Constants.MAX_HEIGHT - 50,
+        margin: 16,
+        marginRight: 8,
+        opacity: 0.3
+    },
+    firstGameRightContainer: {
+        flexBasis: '40%',
+        flex: 1,
+        backgroundColor: '#c3c4c6',
+        height: Constants.MAX_HEIGHT - 50,
+        margin: 16,
+        marginLeft: 8,
+        opacity: 0.3
+    },
+    firstGameText: {
+        color: '#c3c4c6',
+        fontSize: normalize(20),
+        fontFamily: 'SpaceCadetNF',
+        paddingTop: 10,
+        padding: 10,
+        textAlign: 'center'
+    },
+    firstGameTextContainer: {
+        position: 'absolute',
+        top: Constants.MAX_HEIGHT / 5,
+        width: Constants.MAX_WIDTH,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    touchableOpacityFirstGame: {
+        zIndex: 99999999999999999999999999999999,
+        height: Constants.MAX_HEIGHT,
+        width: Constants.MAX_WIDTH,
+        position: 'absolute'
     }
 });
 
