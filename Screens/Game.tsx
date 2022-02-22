@@ -25,10 +25,10 @@ import FitImage from 'react-native-fit-image';
 
 export default function Game(props: any) {
 
-    const health100Image = require('../assets/img/100health.png');
+    const health100Image = require('../assets/img/75health.png');
     const health75Image = require('../assets/img/75health.png');
-    const health50Image = require('../assets/img/50health.png');
-    const health25Image = require('../assets/img/25health.png');
+    const health50Image = require('../assets/img/75health.png');
+    const health25Image = require('../assets/img/75health.png');
 
     // randmomize the first time the coins fall
     const coinsFallTime = [
@@ -195,7 +195,7 @@ export default function Game(props: any) {
         });
 
         const rocket = Matter.Bodies.fromVertices(
-            Constants.MAX_WIDTH / 2, ((Constants.MAX_HEIGHT / 3) * 2), rocketVerticies as any, {
+            (Constants.MAX_WIDTH / 2) - 100, ((Constants.MAX_HEIGHT / 3) * 2), rocketVerticies as any, {
             label: 'rocket',
             collisionFilter: {
                 group: 1,
@@ -213,6 +213,15 @@ export default function Game(props: any) {
         const rocketWidth = rocket.bounds.max.x - rocket.bounds.min.x;
         const rocketHeight = rocket.bounds.max.y - rocket.bounds.min.y;
 
+        const bigRock1 = Matter.Bodies.rectangle(100, 200, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock1', collisionFilter: rockCollisionFilter, mass: Constants.OBJECT_SIZES[2].rockMass });
+        const bigRock2 = Matter.Bodies.rectangle(380, 800, objectSizes.asteroid, objectSizes.asteroid, { restitution: objectSizes.asteroidRestitution, label: 'bigRock2', collisionFilter: rockCollisionFilter, mass: Constants.OBJECT_SIZES[2].rockMass });
+
+        const coin1 = Matter.Bodies.rectangle(150, 410, objectSizes.coin, objectSizes.coin, { label: 'coin1', collisionFilter: coinCollisionFilter, mass: Constants.OBJECT_SIZES[2].coinMass });
+        const coin2 = Matter.Bodies.rectangle(250, 280, objectSizes.coin, objectSizes.coin, { label: 'coin2', collisionFilter: coinCollisionFilter, mass: Constants.OBJECT_SIZES[2].coinMass });
+        const coin3 = Matter.Bodies.rectangle(310, 600, objectSizes.coin, objectSizes.coin, { label: 'coin3', collisionFilter: coinCollisionFilter, mass: Constants.OBJECT_SIZES[2].coinMass });
+
+        const fuel = Matter.Bodies.rectangle(200, 220, objectSizes.fuel, objectSizes.fuel, { label: 'fuel', collisionFilter: fuelCollisionFilter, mass: 2.5 });
+
         let ceiling = Matter.Bodies.rectangle(Constants.MAX_WIDTH / 2, 25, Constants.MAX_WIDTH, 50, { isStatic: true, label: 'ceiling' });
         ceiling.collisionFilter = {
             group: 1,
@@ -223,7 +232,7 @@ export default function Game(props: any) {
         let leftWall = Matter.Bodies.rectangle(0, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'leftWall' });
         let rightWall = Matter.Bodies.rectangle(Constants.MAX_WIDTH, 500, 5, Constants.MAX_HEIGHT, { isStatic: true, label: 'rightWall' });
 
-        Matter.Composite.add(world, [rocket, ceiling, leftWall, rightWall]);
+        Matter.Composite.add(world, [rocket, ceiling, leftWall, rightWall, bigRock1, bigRock2, coin1, coin2, coin3, fuel]);
 
         return {
             physics: { engine: engine, world: world },
@@ -231,6 +240,12 @@ export default function Game(props: any) {
             ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 10], color: "transparent", renderer: Wall },
             leftWall: { body: leftWall, size: [5, Constants.MAX_HEIGHT * 2], color: "transparent", renderer: Wall },
             rightWall: { body: rightWall, size: [5, Constants.MAX_HEIGHT * 2], color: "transparent", renderer: Wall },
+            bigRock1: { body: bigRock1, size: [Constants.OBJECT_SIZES[2].asteroid,Constants.OBJECT_SIZES[2].asteroid], color: "transparent", renderer: Asteroid },
+            bigRock2: { body: bigRock2, size: [Constants.OBJECT_SIZES[2].asteroid,Constants.OBJECT_SIZES[2].asteroid], color: "transparent", renderer: Asteroid },
+            coin1: { body: coin1, size: [Constants.OBJECT_SIZES[2].coin,Constants.OBJECT_SIZES[2].coin], color: "transparent", renderer: GoldCoin },
+            coin2: { body: coin2, size: [Constants.OBJECT_SIZES[2].coin,Constants.OBJECT_SIZES[2].coin], color: "transparent", renderer: GoldCoin },
+            coin3: { body: coin3, size: [Constants.OBJECT_SIZES[2].coin,Constants.OBJECT_SIZES[2].coin], color: "transparent", renderer: GoldCoin },
+            fuel: { body: fuel, size: [Constants.OBJECT_SIZES[2].fuel,Constants.OBJECT_SIZES[2].fuel], color: "transparent", renderer: Fuel },
         }
     }
 
@@ -511,15 +526,7 @@ export default function Game(props: any) {
                             </TouchableOpacity>
                         }
 
-                        {
-                            showCountdownTimer &&
-                            <LottieView style={styles.countdownTimer} source={require('../assets/CountDown.json')} autoPlay />
-                        }
 
-                        {
-                            (!showCountdownTimer && !running && !isFirstGame) &&
-                            <Text style={styles.tapToPlayText}>Tap to Play!</Text>
-                        }
 
                         <Modal
                             animationType="slide"
@@ -567,7 +574,7 @@ export default function Game(props: any) {
                             <Image style={styles.health} resizeMode="stretch" source={healthImageToUse}></Image>
                             <View style={styles.emptySpace}></View>
                             <ImageBackground resizeMode="stretch" style={styles.score} source={scoreboard}>
-                                <Text style={styles.scoreText}>{numberWithCommas(score)}</Text>
+                                <Text style={styles.scoreText}>12,273</Text>
                             </ImageBackground>
                         </View>
                         {

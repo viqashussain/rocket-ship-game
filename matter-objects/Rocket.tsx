@@ -24,7 +24,7 @@ export default class Rocket extends Component<Props, {}> {
         const rocketImage = require('../assets/img/rocket.png');
         const rocketImageWithFire = require('../assets/img/rocket_fire.png');
 
-        let image = rocketImage;
+        let image = rocketImageWithFire;
 
         // flying up
         if (this.props.body.velocity.y < 0)
@@ -36,7 +36,7 @@ export default class Rocket extends Component<Props, {}> {
         this.animatedValue.setValue(this.props.body.velocity.x);
         let rotation = this.animatedValue.interpolate({
             inputRange: [-10, 0, 10, 20],
-            outputRange: ['-20deg', '0deg', '15deg', '45deg'],
+            outputRange: ['20deg', '20deg', '20deg', '20deg'],
             extrapolate: 'clamp'
         })
 
