@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rocket-ship-game2",
-    "slug": "rocket-ship-game2",
+    "name": "Rocket Ship Explorer",
+    "slug": "rocket-ship-explorer4",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.XGLCPK7RQ2.com.rileytestut.AltStore"
     },
     "android": {
       "adaptiveIcon": {
