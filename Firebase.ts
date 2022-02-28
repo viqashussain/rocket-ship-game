@@ -2,16 +2,6 @@ import firebase from "firebase";
 import { getUserName } from "./Storage";
 import { HighScore, GlobalHighScore } from "./types/HighScore";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBlS94UUfbxgo9Woc0KFjeXPNxqIQ5sAgQ",
-    authDomain: "rocket-ship-game.firebaseapp.com",
-    projectId: "rocket-ship-game",
-    storageBucket: "rocket-ship-game.appspot.com",
-    messagingSenderId: "173407629518",
-    appId: "1:173407629518:web:464f385fa74a8e820fa09f",
-    measurementId: "G-J0BS9RZZ1F"
-};
-
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 const db = firebaseApp.firestore();
